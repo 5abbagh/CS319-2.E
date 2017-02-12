@@ -1,10 +1,10 @@
 # CS319-2.E
 ## Group Members:
 
-Ali Sabbagh 21500269
-Mehmet Furkan Dogan 21502274
-Umitcan Hasbioglu 21402314
-Xheni Caka 21403083
+Ali Sabbagh 21500269.
+Mehmet Furkan Dogan 21502274.
+Umitcan Hasbioglu 21402314.
+Xheni Caka 21403083.
 
 ==================================
 
@@ -13,7 +13,7 @@ Xheni Caka 21403083
 
 Have you ever recalled childhood or past gaming memories?
 Do you miss the old Atari games like Pecman and Bomberman?
-Well, we offer you our racing yet stealth game "<b>Maze Runner<\b>" that combines the two games and offers many new features. It will give you the present enjoyment of gaming plus the lovely nostalgia to the old days.
+Well, we offer you our racing yet stealth game "<b>Maze Runner</b>" that combines the two games and offers many new features. It will give you the present enjoyment of gaming plus the lovely nostalgia to the old days.
 
 The runner will begin at a starting point in the maze, and will try to reach the exit, in a time limit, paying attention to patrols of soldiers. The runner can avoid patrols by not touching them, or by throwing grenades at them.
 While playing, some boxes will appear in different places in the maze, containing bonuses in time, health or score.
