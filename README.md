@@ -1,30 +1,25 @@
 # CS319-2.E
+## Group Members:
 
-
-Group Members:
-
-Ali Sabbagh 21500269,
-Umitcan Hasbioglu 21402314,
-Xheni Caka 21403083,
-Mehmet Furkan Dogan 21502274,
+Ali Sabbagh 21500269
+Mehmet Furkan Dogan 21502274
+Umitcan Hasbioglu 21402314
+Xheni Caka 21403083
 
 ==================================
 
-"The Game"
 
-Our game will be a combination of Pecman and Bomberman, with additional features.
+## Project Description
 
-The game can be played in two modes: Single and multiplayer.
+Have you ever recalled childhood or past gaming memories?
+Do you miss the old Atari games like Pecman and Bomberman?
+Well, we offer you our racing yet stealth game "<b>Maze Runner<\b>" that combines the two games and offers many new features. It will give you the present enjoyment of gaming plus the lovely nostalgia to the old days.
 
-Players will start at a point in a maze, and they will try to reach the exit, in a time limit, facing enemies that will be of defferent abbilities: ones that only patrol in place, and others that follow the player if they saw it.
+The runner will begin at a starting point in the maze, and will try to reach the exit, in a time limit, paying attention to patrols of soldiers. The runner can avoid patrols by not touching them, or by throwing grenades at them.
+While playing, some boxes will appear in different places in the maze, containing bonuses in time, health or score.
 
-Players can avoid enemies by not getting too close, or by firing grenades at them.
-
-At the time of playing, some boxes will appear, containing bonuses in time, health, or points.
-
-When in multiplayer, when a player reaches a specific total point, the player will have the ability to plant a bomb near the other player which will make the other player try to avoid it by losing time or health.
-
-The player that reaches the exit first is the winner.
+The game can be also played in multiplayer mode, with two players using one keyboard.
+The players will be playing in symmetric seperate mazes. In multiplayer the game becomes more difficult as it has the same previous instructions plus that the winner is the first player to reach the exit. When a player reaches a specific score, the player will have the ability to throw a grenade near the second player which will make the latter try to avoid it by escaping or otherwise getting injured (decreasing health).
 
 ==================================================================
 
