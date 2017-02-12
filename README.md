@@ -3,10 +3,10 @@
 
 Group Members:
 
-Ali Sabbagh 21500269
-Umitcan Hasbioglu 21402314
-Xheni Caka 21403083
-Mehmet Furkan Dogan 21502274
+Ali Sabbagh 21500269,
+Umitcan Hasbioglu 21402314,
+Xheni Caka 21403083,
+Mehmet Furkan Dogan 21502274,
 
 ==================================
 
