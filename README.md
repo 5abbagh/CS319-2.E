@@ -21,6 +21,9 @@ While playing, some boxes will appear in different places in the maze, containin
 The game can be also played in multiplayer mode, with two players using one keyboard.
 The players will be playing in symmetric seperate mazes. In multiplayer the game becomes more difficult as it has the same previous instructions plus that the winner is the first player to reach the exit. When a player reaches a specific score, the player will have the ability to throw a grenade near the second player which will make the latter try to avoid it by escaping or otherwise getting injured (decreasing health).
 
+What Maze Runner offers new compared to older games like (Pecman and Bomberman) is the time constraint, the bonus boxes and the abbility to play in multiplayer mode.
+The objective of older games was to eleminate the soldiers. However, the goal of our game is to solve a sophisticated maze as fast as possible with the least possible attraction of soldiers.
+
 ==================================================================
 
 ## References
