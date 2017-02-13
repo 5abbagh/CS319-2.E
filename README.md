@@ -23,5 +23,9 @@ The players will be playing in symmetric seperate mazes. In multiplayer the game
 
 ==================================================================
 
+## References
 
+PAC-MAN: https://en.wikipedia.org/wiki/Pac-Man
+Bomberman: https://en.wikipedia.org/wiki/Bomberman_(1983_video_game)
 
+=====================================================================
