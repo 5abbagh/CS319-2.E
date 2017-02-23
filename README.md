@@ -1,10 +1,10 @@
 # CS319-2.E
 ## Group Members:
 
-<br>Ali Sabbagh 21500269</br>
-<br>Mehmet Furkan Dogan 21502274</br>
-<br>Umitcan Hasbioglu 21402314</br>
-<br>Xheni Caka 21403083</br>
+<br>Ali Sabbagh</br>
+<br>Mehmet Furkan Dogan</br>
+<br>Umitcan Hasbioglu</br>
+<br>Xheni Caka</br>
 
 ==================================
 
