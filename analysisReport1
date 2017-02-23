@@ -15,18 +15,35 @@ INTRODUCTION
 
 	Overview
 	The game consists of a Pac-man like moving object which goal is to finish the maze as soon as possible without being killed by 
-	the soldiers which are continuosly moving around and trying to stop the player from reaching the exit of the maze. The player 		has abilities that help him escape from the soldiers when he is very close to them. The game has a time limit and also there are         time related features of the bombs. 
+	the patrols which are continuosly moving around and trying to stop the player from reaching the exit of the maze. The player 		has abilities that help him escape from the patrols when he is very close to them. The game has a time limit and also there are         time related features of the bombs. 
         The game can be paused and continued where it was left afterwards. A high score system will be accessible allowing the player to         check his last five scores. 
-        In both arcade and multiplayer versions the game will be played by using the keyboard. Player can access the help menu to get           instructions on how to play the game.
+        In both single and multiplayer versions, the game will be played by using the keyboard. Player can access the help menu to get           instructions on how to play the game.
         
 	2.1.  Play Mode
-	Single player  mode: In the arcade mode the player’s goal is to reach to the exit as soon as possible. There will be the 		soldiers trying to stop him and the challenge is going to be finishing the maze before the time ends. The player can get rid of 	the soldiers by throwing bombs to them but needs to escape in a short amount of time from the explosion range
-	Multiplayer mode: In this mode there is not a time limit to finish the game but the challenge is finishing before your opponent. 	 The game is won from the player who made it first to the exit or if any of the players got killed then the other player wins the 	  game.
-	2.2. Bomb Types
-	Own area: This kind of bomb is dropped in the current position of the player and has a small explosion area and the target is 		the soldiers. It has an explosion time of 5 seconds which is enough for the player to escape from the explosion range. There 		will be an unlimited number of such bombs available to the player and killing 2 or more soldiers wins you another kind of bomb 		which you can throw in the opponent’s area when in multiplayer mode.
-	Opponent area: This kind of bomb differs from the other type because it is used to kill your opponent and resets the opponent’s 	position to the beginning position. The player unlocks this bomb if he has killed two or more soldiers in his area by using 		normal bombs.
-
-
+	
+	Single player  mode: In the arcade mode the player’s goal is to reach to the exit as soon as possible. There will be the 		patrols trying to stop him and the challenge is finishing the maze before the time ends. The player can get rid of the 			patrols by throwing bombs to them but needs to escape in a short amount of time from the explosion range
+	
+	Multiplayer mode: In this the challenge is finishing before your opponent. The game is won from the player who made it 		         first to the exit or, if the time limit is up and none of the players makes it to the finish line, then the winner is the one 		who has collected more points.
+	
+	2.2. Bomb
+	Area:
+	
+	2.2.1. Own area: This kind of bomb is dropped in the current position of the player and has a small explosion area and the   		target is the patrols. It has an explosion time of 2 seconds which is enough for the player to escape from the explosion range.
+	
+	2.2.2. Opponent area: This kind of bomb differs from the other type because it is used to kill your opponent and resets the 		opponent’s position to the beginning position unless the opponent makes it away untouched.
+	
+	Usage ability: Planting a bomb on his maze costs specific amount of points (100) but planting on the other side costs 			double(200). Each player has 200 points when “MazeRunner” starts and the score of the player increases as the time runs 		out such as gets 100 points in every 15 seconds. He can spend this points according to his position in the maze. For instance, 		in the multi-player mode, if he is ahead of the other player, uses bombs to pass the patrols or if he is not ahead, uses bombs 		to bring back his enemy to initial point unless the enemy gets away of the explosion rate on time.
+	
+	2.3. Time
+	Limit: There will be a time limit to finish the game and it will vary from level to level. In the first level the time limit is 	1 minute 30 seconds. In the second level the time limit is 2 minutes 30 seconds and in the third level the time limit is 3 		minutes 30 seconds.
+	
+	Bonus Score: When the game is done the remaining time in seconds will be multiplied by 10 and it will be added to the score.
+	
+	2.4 Patrols
+	Blue: These patrols just move in one direction and they do not follow. They kill only if the player hits them.
+	
+	Yellow: These patrols move back and forth and they have the ability to follow the player when he is in a certain range. The 		player then has to escape or kill them in order to get rid of them.
+	
 Functional Requirements
 
 	-Player(s) should be able to move freely except their direction is blocked by obstacles.
