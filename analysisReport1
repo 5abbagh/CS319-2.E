@@ -3,14 +3,10 @@ INTRODUCTION
 
 
 	The project group decides to implement an arcade game because arcade games has an advantage which is the models can be drawn 
-	easily than the other programs. Thus, we decided to create a game which is combination of “Pacman" and “Bomberman”. We decided to
-	implement a stealth game "Maze Runner" that combines these two games and offers many new features. It will give you the present
-	enjoyment of gaming plus the lovely nostalgia to the old days. The game can be played as a single player or multi-player and the
-	game purpose is to reach the end as soon as possible.
+	easily than the other programs. Thus, we decided to create a game which is combination of “Pacman" and “Bomberman”. We decided 		to implement a stealth game "Maze Runner" that combines these two games and offers many new features. It will give you the 		present enjoyment of gaming plus the lovely nostalgia to the old days. The game can be played as a single player or multi-player 	and the game purpose is to reach the end as soon as possible.
 
 	The goal of our game is to solve a sophisticated maze as fast as possible with the least possible attraction of soldiers. Both
-	single and multi-player modes can plant a bomb and tries to keep the patrols out of your way or damage your enemy(in multi-player
-	version). When the player reaches the end, he will receive bonus points with respect to remaining time. 
+	single and multi-player modes can plant a bomb and tries to keep the patrols out of your way or damage your enemy(in multi-		player version). When the player reaches the end, he will receive bonus points with respect to remaining time. 
 
 	Overview section includes more details about the content of the project. The report contains overview, functional requirements, 
 	nonfunctional requirements and use case model chapters. The following chapter is overview that gives more information about
@@ -19,8 +15,10 @@ INTRODUCTION
 
 Overview
 	The game consists of a Pac-man like moving object which goal is to finish the maze as soon as possible without being killed by 
-	the soldiers which are continuosly moving around and trying to stop the player from reaching the exit of the maze. The player has 
-	abilities that help him escape from the soldiers when he is very close to them. 
+	the soldiers which are continuosly moving around and trying to stop the player from reaching the exit of the maze. The player 		has abilities that help him escape from the soldiers when he is very close to them. The game has a time limit and also there are        time related features of the bombs. 
+        The game can be paused and continued where it was left afterwards. A high score system will be accessible allowing the player to        check his last five scores. 
+        In both arcade and multiplayer versions the game will be played by using the keyboard. Player can access the help menu to get           instructions on how to play the game
+        
 
 
 Functional Requirements
