@@ -2,12 +2,56 @@
 INTRODUCTION
 
 
-	The project group decides to implement an arcade game because arcade games has an advantage which is the models can be drawn easily than the other programs. Thus, we decided to create a game which is combination of “Pacman" and “Bomberman”. We decided to implement a stealth game "Maze Runner" that combines these two games and offers many new features. It will give you the present enjoyment of gaming plus the lovely nostalgia to the old days. The game can be played as a single player or multi-player and the game purpose is to reach the end as soon as possible.
+	The project group decides to implement an arcade game because arcade games has an advantage which is the models can be drawn 
+	easily than the other programs. Thus, we decided to create a game which is combination of “Pacman" and “Bomberman”. We decided to
+	implement a stealth game "Maze Runner" that combines these two games and offers many new features. It will give you the present
+	enjoyment of gaming plus the lovely nostalgia to the old days. The game can be played as a single player or multi-player and the
+	game purpose is to reach the end as soon as possible.
 
-	The goal of our game is to solve a sophisticated maze as fast as possible with the least possible attraction of soldiers. Both single and multi-player modes can plant a bomb and tries to keep the patrols out of your way or damage your enemy(in multi-player version). When the player reaches the end, he will receive bonus points with respect to remaining time. 
+	The goal of our game is to solve a sophisticated maze as fast as possible with the least possible attraction of soldiers. Both
+	single and multi-player modes can plant a bomb and tries to keep the patrols out of your way or damage your enemy(in multi-player
+	version). When the player reaches the end, he will receive bonus points with respect to remaining time. 
 
-	Overview section includes more details about the content of the project. The report contains overview, functional requirements, nonfunctional requirements and use case model chapters. The following chapter is overview that gives more information about the
-the game.
+	Overview section includes more details about the content of the project. The report contains overview, functional requirements, 
+	nonfunctional requirements and use case model chapters. The following chapter is overview that gives more information about
+	the game.
+	
 
 Overview
-The game consists of a Pac-man like moving object which goal is to finish the maze as soon as possible without being killed by the soldiers which are continuosly moving around and trying to stop the player from reaching the exit of the maze. The player has abilities that help him escape from the soldiers when he is very close to them 
+	The game consists of a Pac-man like moving object which goal is to finish the maze as soon as possible without being killed by 
+	the soldiers which are continuosly moving around and trying to stop the player from reaching the exit of the maze. The player has 
+	abilities that help him escape from the soldiers when he is very close to them. 
+
+
+Functional Requirements
+
+	-Player(s) should be able to move freely except their direction is blocked by obstacles.
+
+	-Players(s) should be able to plant bombs in their area as well as in other player's area.
+
+	-Players(s) should die if a bomb explodes near them or any of computer controlled enemies touch them.
+
+	-Game should end if any of the players dies or reaches the end point.
+
+	-If game ends, player(s) should be able to restart the game.
+
+	-Game should be customizable such as number of bots, number of bricks that can be exploded by bombs or the speed of the bots
+	or the resolution.
+	
+	-Bombs that planted in other players side should be placed in where the other player is. 
+
+
+Non-Functional Requirements
+
+	-Bombs should explode after 2 seconds + randomly determined time up to 1 second.
+
+	-Player(s) movement should not be blocked by bombs.
+
+	-By default, player(s) speed should be 0.66 times of enemies.
+
+	-Approximately, games FPS should be reasonable such as 100 FPS.
+
+	-Player(s) should be able to plant bomb in their sides after 5 seconds they plant a bomb on their side and plant a bomb after 10
+	seconds	they plant a bomb on other players side.
+
+	
