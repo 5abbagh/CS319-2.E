@@ -36,10 +36,10 @@
 	2.2. Bomb
 	Area:
 	
-	2.2.1. Own area: This kind of bomb is dropped in the current position of the player and has a small explosion area and the target 
+		Own area: This kind of bomb is dropped in the current position of the player and has a small explosion area and the target 
 	is the patrols. It has an explosion time of 2 seconds which is enough for the player to escape from the explosion range.
 	
-	2.2.2. Opponent area: This kind of bomb differs from the other type because it is used to kill your opponent and resets the 
+		Opponent area: This kind of bomb differs from the other type because it is used to kill your opponent and resets the 
 	opponent’s position to the beginning position unless the opponent makes it away untouched.
 	
 	Usage ability: 
