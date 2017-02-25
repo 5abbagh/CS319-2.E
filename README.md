@@ -5,7 +5,7 @@ Ali Sabbagh, Mehmet Furkan Dogan, Umitcan Hasbioglu, Xheni Caka
 
 ==================================
 
-
+For more details check the Analysis Report in the docs folder
 ## Project Description
 
 Have you ever recalled childhood or past gaming memories?
