@@ -93,4 +93,58 @@
 	-Player(s) should be able to plant bomb in their sides after 5 seconds they plant a bomb on their side and plant a bomb after 10
 	seconds	they plant a bomb on other players side.
 
-	
+
+# Use Cases:
+
+	Use case name:		SelectDifficulty
+	Contributors:		Player
+	Entry condition:	Game launched and main menu is entered
+	Flow of events:		Player presses the select difficulty button, three buttons appear, (Easy-Regular-Hard), Player selects 
+				one, and automatically goes back to main menu.
+	Exit condition:		Player is in main menu, with difficulty selected.
+	Exceptions:		No exceptions.
+
+
+	Use case name:		CheckLeaderboard 
+	Contributors:		Player
+	Entry condition:	Game launched and main menu is entered
+	Flow of events:		Player presses “Leaderborad” button, enters to the table saving names and scores of the top 5 players.
+	Exit condition:		Player is back to main menu.
+	Exceptions:		In case game is newly installed table will be empty.
+				“Take the chance and be on top of the leaderborad!” message will appear.
+
+
+	Use case name: 		WatchTutorials
+	Contributors:		Player
+	Entry condition:	Game launched and main menu is entered
+	Flow of events:		Player will enter a screen showing a picture explaining one of the game rules, a next arrow will take 
+				the player to next picture, a back one will go to the previous picture, pressing “Done” will take 
+				the player to main menu.
+	Exit condition:		Player is back to main menu.
+	Exceptions:		No exceptions.
+
+
+	Use case name: 		PauseGame
+	Contributors:		Player(s)
+	Entry condition:	Player(s) should be already playing.
+	Flow of events:		Pressing the pause button, will display the Pause dialogue, game will stop, and then resume when the 
+				button is pressed again.
+	Exit condition:		Game will resume.
+	Exceptions:		Pause is not available after a player reaches the end of the maze
+
+
+	Use case name: 		SelectPlayingMode
+	Contributors:		Player
+	Entry condition:	Game launched, “Play” button from main menu pressed
+	Flow of events:		Once player presses “Play” a screen asking for game mode selection appears, with two options: 
+				Single player, Multiplayer, pressing one will start the game accordingly.
+	Exit condition:		Player(s) in the game. Maze(s) are shown, game will start in 3 seconds.
+	Exceptions:		No exceptions
+
+
+	Use case name: 		JoinLeaderboard
+	Contributors:		Winning player
+	Entry condition:	Player reached the exit, game finished, total score is calculated. 
+	Flow of events:		Player is shown the leaderboard, with ability to write his name, to save it if he/she is among the top 5.
+	Exit condition:		Player(s) back to main menu
+	Exceptions:		No exceptions
