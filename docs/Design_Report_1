@@ -1,4 +1,5 @@
 Design Goals
+
 -Understandability:
 We aim our game to be playable by both adults and young people. Therefore we thought that in order to achieve that, we need to make game more understandable such that people need to understand how the game works. In game wise, we are planning to add many tutorials and make game components simple and clear as much as possible. In design/implementation wise, we decided to go with make it as less complicated as we can to make the project's progression as fast as possible.
 
