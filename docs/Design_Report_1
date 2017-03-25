@@ -1,1 +1,21 @@
+Design Goals
+-Understandability:
+We aim our game to be playable by both adults and young people. Therefore we thought that in order to achieve that, we need to make game more understandable such that people need to understand how the game works. In game wise, we are planning to add many tutorials and make game components simple and clear as much as possible. In design/implementation wise, we decided to go with make it as less complicated as we can to make the project's progression as fast as possible.
 
+-Minimum Number of Errors:
+Errors make our programs unbearable. Therefore we have to go with least number of errors in our programs. In our project  we decided to make our program well designed and implemented. In the implementation phase, we will have to catch most of the exceptions and handle them in a proper way. In the aspect of design and game, we thought that, in order to face with and handle possible errors we should not add complicated features such that saving for the possibility of crashing game. Also in order to not allow users to crash the game, we are going to strictly use encapsulation on classes and save system's required files into .jar as we decided to use Java.     
+
+Hardware/Software Mapping
+Maze Runner is a Java based game. Thus it is playable on all the machines that support Java. Since we will develop our game on latest update of JRE, latest version of Java is recommended for users. Also, game will get input from user from keyboard with supported characters. Those characters will be ASCII characters since we want the game be playable across the world. Neither a working internet connection nor a high performance CPU/GPU is required for to game be played.
+
+Persistent Data Management
+Game will read data of images, high scores, maps from the disk and initialize the data no matter what a user does with the game, thus these are expected datas whenever the game starts executing. In the writing to disk wise, If a user gets a high score where it is in the top 5 recorded datas to disk, user will get a chance to save that score, therefore writing to disk is also expected.
+
+About the data organisation, for the maps, we are going to use 2D arrays and save them to the disk in a proper way, such as .txt files; for images, we are going to store them as .png format; for high scores, again we are going to use .txt files in a proper way.
+
+Access Control  and Security
+The only aspect of the project that we have to ensure of security is the high scores part, other than that since all the users are able to use same functionality of the program, we do not really need a user authentication system. 
+In order to properly secure high scores part, we will encode the high scores in a such way that, any improper change will be detected by program, also we will be ensure that the names and the scores of top players will not be readable by a normal person, so that anyone who wants to cheat cannot go ahead and change those values.
+
+Boundary Conditions
+Since Maze Runner is an offline program, we will not have any data loss. But in the case of a security infraction, whereas the change of game data, or an invalid value for externally changed resources but used internally such as, changing the map in such a way that it will not be playable, will obviously cause errors, but the game itself will determine those by having certain checkpoints that if the data cannot get through those, logic will not let the user to play the game, will pop up an error message and then will stop executing.
