@@ -13,6 +13,7 @@ import java.awt.Image;
  */
 public abstract class MovingObject extends GameObject{
     int speed;
+    boolean isAlive;
     public MovingObject(int x, int y, Image image, int speed, int width, int height){
         super(x,y,image, width, height);
         this.speed = speed;
@@ -33,11 +34,17 @@ public abstract class MovingObject extends GameObject{
                 break;
         }
     }
-    public abstract void die();
+    public void die(){
+        isAlive= false;
+    }
     public int getSpeed(){
         return speed;
     }
     public void setSpeed(int speed){
         this.speed = speed;
+    }
+    
+    public boolean isAlive(){
+        return isAlive;
     }
 }
