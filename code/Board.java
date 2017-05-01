@@ -32,14 +32,13 @@ public class Board extends JPanel implements ActionListener {
     private long startTime;
     private Timer timer;
     private ArrayList<Pacman> players = new ArrayList<Pacman>();
-    private ArrayList<Patrol> bots = new ArrayList<Patrol>();
+    private ArrayList<Patrol> patrols = new ArrayList<Patrol>();
     private ArrayList<Image> images = new ArrayList<Image>();
     private ArrayList<Bomb> bombs = new ArrayList<Bomb>();
     private ArrayList<Bonus> bonuses = new ArrayList<Bonus>();
     private FileManager fileManager = new FileManager();
     
     private int[][] table;
-    private int currentNumBots;
     private int result = -1;
     //private Console console;
     private BoardUI ui;
@@ -74,7 +73,6 @@ public class Board extends JPanel implements ActionListener {
         this.level = level;
         containerPanel = root;
         numP = numberOfPlayers;
-        currentNumBots = 0;
         result = -1;
         gameLength *= level;
         startTime = System.currentTimeMillis();
@@ -82,7 +80,7 @@ public class Board extends JPanel implements ActionListener {
         initImages();
         unitWidth = WIDTH / table[0].length;
         unitHeight = HEIGHT / table.length;
-        bots = initPatrols();
+        patrols = initPatrols();
         players = initPlayers();
         timer = new Timer(DELAY, this);
         timer.start();
@@ -185,8 +183,8 @@ public class Board extends JPanel implements ActionListener {
         for(int i = 0; i < players.size(); i++){
             objects.add(players.get(i));
         }
-        for(int i = 0; i < bots.size(); i++){
-            objects.add(bots.get(i));
+        for(int i = 0; i < patrols.size(); i++){
+            objects.add(patrols.get(i));
         }
         for(int i = 0; i < bombs.size(); i++){
             objects.add(bombs.get(i));
@@ -320,8 +318,8 @@ public class Board extends JPanel implements ActionListener {
     	ArrayList<MovingObject> mortalObjects = new ArrayList();
         for(int i = 0; i < players.size(); i++)
             mortalObjects.add(players.get(i));
-        for(int i = 0; i < bots.size(); i++)
-            mortalObjects.add(bots.get(i));
+        for(int i = 0; i < patrols.size(); i++)
+            mortalObjects.add(patrols.get(i));
         for(int i = 0; i < mortalObjects.size(); i++){
             MovingObject obj = mortalObjects.get(i);
             int objXLoc = obj.getX() / unitWidth;
@@ -407,10 +405,10 @@ public class Board extends JPanel implements ActionListener {
         }
     }
     private void updatePatrols() {
-        for(int i = 0; i < bots.size(); i++){
-            Patrol currentPatrol = bots.get(i);
+        for(int i = 0; i < patrols.size(); i++){
+            Patrol currentPatrol = patrols.get(i);
             /*if(!currentPatrol.isAlive()){
-                bots.remove(i);
+                patrols.remove(i);
                 i--;
             }*/
             //else{
@@ -669,3 +667,4 @@ public class Board extends JPanel implements ActionListener {
         return -1;
     }
 }
+
