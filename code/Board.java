@@ -72,6 +72,10 @@ public class Board extends JPanel implements ActionListener {
         return  ui;
     }
     public Board(int numberOfPlayers, int level, JPanel root ){
+        initBoard(numberOfPlayers, level, root, false);
+    }
+    
+    private void initBoard(int numberOfPlayers, int level, JPanel root, boolean isRestart){
         this.level = level;
         containerPanel = root;
         numP = numberOfPlayers;
@@ -87,11 +91,12 @@ public class Board extends JPanel implements ActionListener {
         players = initPlayers();
         timer = new Timer(DELAY, this);
         timer.start();
-        ui = new BoardUI(this);
-        containerPanel.removeAll();
-        containerPanel.add(ui);
-        containerPanel.revalidate();
-        
+        if(!isRestart){
+            ui = new BoardUI(this);
+            containerPanel.removeAll();
+            containerPanel.add(ui);
+            containerPanel.revalidate();
+        }
     }
     private ArrayList<Pacman> initPlayers(){
         int[] locations = new int[8];
@@ -116,6 +121,7 @@ public class Board extends JPanel implements ActionListener {
                         break;        
                 }
             }
+        ArrayList<Pacman> players = new ArrayList(2);
         players.add(new Pacman(locations[0], locations[1], PLAYER_SPEED, PlayerRightImage,  1, unitWidth / 2, unitHeight / 2 ));
         players.get(0).setFinishPoints(locations[2], locations[3]);
         if(numP == 2){
@@ -130,7 +136,7 @@ public class Board extends JPanel implements ActionListener {
             int randomY = (int)(Math.random() * table.length);
             int randomX = (int)(Math.random() * table[0].length);
             if(table[randomY][randomX] == 0){
-                patrols.add(new Patrol(randomX * unitWidth, randomY * unitHeight, PATROL_SPEED, AIImage, false, unitWidth, unitHeight, table));
+                patrols.add(new Patrol(randomX * unitWidth, randomY * unitHeight, PATROL_SPEED, AIImage, false, unitWidth , unitHeight));
                 i++;
             }
         }
@@ -138,7 +144,7 @@ public class Board extends JPanel implements ActionListener {
             int randomY = (int)(Math.random() * table.length);
             int randomX = (int)(Math.random() * table[0].length);
             if(table[randomY][randomX] == 0){
-                patrols.add(new Patrol(randomX * unitWidth, randomY * unitHeight, PATROL_SPEED, AI2Image, true, unitWidth, unitHeight, table));
+                patrols.add(new Patrol(randomX * unitWidth, randomY * unitHeight, PATROL_SPEED, AI2Image, true, unitWidth , unitHeight));
                 i++;
             }
         }
@@ -169,8 +175,6 @@ public class Board extends JPanel implements ActionListener {
                 updateResults();
                 //updateBonuses();
             }
-            if(isPaused)
-                startTime += DELAY + 2;
             ui.repaint();
         }catch(Exception ex){
         }
@@ -215,35 +219,35 @@ public class Board extends JPanel implements ActionListener {
     }
     
     //Controllers
-    private boolean moveCollide(MovingObject player, int direction){
+    private boolean moveCollide(MovingObject obj, int direction){
         
-        int plannedX = player.getX() ;
-        int plannedY = player.getY() ;
+        int plannedX = obj.getX() ;
+        int plannedY = obj.getY() ;
 
         switch(direction){
             case 1:
-                plannedX += player.getSpeed() ;
+                plannedX += obj.getSpeed() ;
                 break;
             case 2:
-                plannedY += player.getSpeed() ;
+                plannedY += obj.getSpeed() ;
                 break;
             case 3:
-                plannedX -= player.getSpeed() ;
+                plannedX -= obj.getSpeed() ;
                 break;
             case 4:
-                plannedY -= player.getSpeed();
+                plannedY -= obj.getSpeed();
                 break;
         }
         if(plannedX < 0 || plannedX > WIDTH || plannedY < 0 || plannedY > HEIGHT){
             
             return false;
         }
-        int rtx = plannedX + player.getWidth();
+        int rtx = plannedX + obj.getWidth();
         int rty = plannedY;
         int lbx = plannedX;
-        int lby = plannedY + player.getHeight();
-        int rbx = plannedX + player.getWidth();
-        int rby = plannedY + player.getHeight();
+        int lby = plannedY + obj.getHeight();
+        int rbx = plannedX + obj.getWidth();
+        int rby = plannedY + obj.getHeight();
         //int unitWidth = player.getWidth();
         //int unitHeight = player.getHeight();
         rby--;
@@ -278,8 +282,17 @@ public class Board extends JPanel implements ActionListener {
                 check2Y = plannedY / unitHeight;
                 break;    
         }
-        
-        if(table[check1Y][check1X] == 1 || table[check2Y][check2X] == 1){
+        if(obj.getClass().getSimpleName().equals("Patrol"))
+            {
+                ArrayList<Integer> list = new ArrayList();
+                list.add(-2);
+                list.add(2);
+                list.add(1);
+                if(list.contains(table[check1Y][check1X]) || list.contains(table[check2Y][check2X]))
+                    return false;
+            }
+        else if(table[check1Y][check1X] == 1 || table[check2Y][check2X] == 1){
+            
             return false;
         }
         }catch(Exception e){
@@ -406,8 +419,13 @@ public class Board extends JPanel implements ActionListener {
                 i--;
             }*/
             //else{
-                int dir = (int)(Math.random() * 4) + 1;
-                    currentPatrol.move();
+                ArrayList<Integer> list = new ArrayList();
+                for(int p = 1; p <= 4; p++){
+                    if(moveCollide(currentPatrol, p))
+                        list.add(p);
+                }
+                currentPatrol.initRoutes(list);
+                currentPatrol.move();
                 if(currentPatrol.isFollowPatrol() ){
                     
                     boolean inRange = false;
@@ -438,7 +456,7 @@ public class Board extends JPanel implements ActionListener {
         for(Pacman player : players){
             if(((player.getFinishX() - player.getX())/unitWidth) == 0 && ((player.getFinishY() - player.getY())/unitHeight) == 0 )
                 endGame(true, player);
-            else if(player.isDead())
+            else if(!player.isAlive())
                 endGame(false, player);
         }
     }    
@@ -483,7 +501,7 @@ public class Board extends JPanel implements ActionListener {
         if(System.currentTimeMillis() > startTime + gameLength)
             endGame(false, null);
         for(int i = 0; i < players.size(); i++)
-            if(players.get(i).isDead())
+            if(!players.get(i).isAlive())
                 endGame(false, null);
             else{
                     if(table[players.get(0).getY() / unitHeight][players.get(0).getX() / unitWidth] == 3)
@@ -506,17 +524,21 @@ public class Board extends JPanel implements ActionListener {
         }*/
     }
     public void keyPressed(int[] key){
-        int i = 0;
-        while(true){
-            if(key[i] == -1)
-                break;
-            keyPressed(key[i]);
-            i++;
-        }
+        for(int k = 0; k < key.length; k++)
+            if(key[k] != -1){
+                keyPressed(key[k]);
+            }
     }
     
     public void pause(boolean stat){
-        isPaused = stat;
+        if(stat)
+            timer.stop();
+        else
+            timer.start();
+    }
+    
+    public void restart(){
+        initBoard(numP, level, containerPanel, true);
     }
     //Key Evaluation
     public void keyPressed(int key){
