@@ -1,17 +1,14 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package mazerunner;
 
 /**
  *
- * @author LUL
+ * @author Mehmet
  */
 import java.util.ArrayList;
 import java.awt.Image;
 public class Pacman extends MovingObject {
+    private final int START_SCORE = 250;
+    private final int START_HEALTH = 3;
     private final int OWN_BOMB_COST = 100;
     private final int ENEMY_BOMB_COST = 100;
     private long finalBombTime;
@@ -23,7 +20,7 @@ public class Pacman extends MovingObject {
     private int dx;
     private int dy;
     private int lives = 3;
-    private int score = 250;
+    private int score;
     private boolean isDead = false;
     private ArrayList<Bomb> bombs;
     private int playerNumber;
@@ -39,6 +36,8 @@ public class Pacman extends MovingObject {
         bombs = new ArrayList<Bomb>();
         this.playerNumber = playerNumber;
         finalBombTime = System.currentTimeMillis();
+        score = START_SCORE;
+        lives = START_HEALTH;
     }  
     public void setFinishPoints(int x, int y){
         finishX = x;
@@ -78,18 +77,17 @@ public class Pacman extends MovingObject {
     public int getLives(){
         return lives;
     }   
-    public boolean isDead(){
-        return isDead;
-    }    
+
     public boolean bomb() {
         if(score >= OWN_BOMB_COST && System.currentTimeMillis() > finalBombTime + bombDebounce){
             finalBombTime = System.currentTimeMillis();
             score -= OWN_BOMB_COST;
+            
             return true;
         }
         return false;
     }
-    public boolean bombNearEnemy(){
+    public boolean bombNearEnemy(){       
         if(score >= ENEMY_BOMB_COST && System.currentTimeMillis() > finalBombTime + bombDebounce){
             finalBombTime = System.currentTimeMillis();
             score -= ENEMY_BOMB_COST;
