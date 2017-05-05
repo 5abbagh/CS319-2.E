@@ -112,51 +112,37 @@ public class FileManager
 	
 	
 	
-	public static void replaceOldName(String oldScore,String name) throws IOException
+	public static void changeNames(ArrayList<String> listX) throws IOException
 	{
-		int foo = Integer.parseInt(oldScore);
 		Scanner fileIn = new Scanner(new File("/Users/umitcanhasbioglu/Desktop/names.txt"));
-		Scanner fileIn2 = new Scanner(new File("/Users/umitcanhasbioglu/Desktop/scores.txt"));
 		for(int i=0;i<5;i++)
 		{
-			String oldName = fileIn.next();
-			String score = fileIn2.next();
-			int foo1 = Integer.parseInt(score);
-			if(foo == foo1)
-			{
-			
-			Path path = Paths.get("/Users/umitcanhasbioglu/Desktop/names.txt");
-			Charset charset = StandardCharsets.UTF_8;
-			String content = new String(Files.readAllBytes(path), charset);
-			content = content.replaceAll( oldName , name );
-			Files.write(path, content.getBytes(charset));
-			
-			}
+		String oldName = fileIn.next();
+		String s = listX.get(i);
+		Path path = Paths.get("/Users/umitcanhasbioglu/Desktop/names.txt");
+		Charset charset = StandardCharsets.UTF_8;
+		String content = new String(Files.readAllBytes(path), charset);
+		content = content.replaceAll( oldName , s);
+		Files.write(path, content.getBytes(charset));
 		}
-		
+	
 	}
 	
-	
-	public static void saveHighScore(String name,String newScore, String oldScore) throws IOException
+	public static void changeScores(ArrayList<Integer> listX) throws IOException
 	{
-		
-		replaceOldName(oldScore,name);
+		Scanner fileIn = new Scanner(new File("/Users/umitcanhasbioglu/Desktop/scores.txt"));
+		for(int i=0;i<5;i++)
+		{
+		String oldName = fileIn.next();
+		int s = listX.get(i);
+		String x = "" + s;
 		Path path = Paths.get("/Users/umitcanhasbioglu/Desktop/scores.txt");
 		Charset charset = StandardCharsets.UTF_8;
 		String content = new String(Files.readAllBytes(path), charset);
-		content = content.replaceAll( oldScore , newScore );
+		content = content.replaceAll( oldName , x);
 		Files.write(path, content.getBytes(charset));
-
-                ArrayList<String> fileContent = new ArrayList<>(Files.readAllLines(path, StandardCharsets.UTF_8));
-                for (int i = 0; i < 5; i++) {
-                    if (fileContent.get(i).equals(oldScore)) {
-                        fileContent.set(i, newScore);
-                        break;
-                    }
-                }
-
-                Files.write(path, fileContent, StandardCharsets.UTF_8);
-		
+		}
+	
 	}
         
         public static AudioInputStream[] getMusic(){
