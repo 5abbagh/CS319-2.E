@@ -1,9 +1,7 @@
+package mazerunner;
+
 import java.awt.Image;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -11,9 +9,18 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Scanner;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
 import javax.swing.ImageIcon;
+import sun.audio.AudioData;
+import sun.audio.AudioPlayer;
+import sun.audio.AudioStream;
+import sun.audio.ContinuousAudioDataStream;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 
-public class FileMngr
+public class FileManager
 {
 	private static ArrayList<String> namelist;
 	public static ArrayList<Image> list = new ArrayList<Image>();
@@ -39,90 +46,41 @@ public class FileMngr
 	  }
 	
 	public static int[][] getMaze(int numP, int difficulty){
-		//2 for 1 start
+	    //2 for 1 start
 	    //3 for 1 end
-		//-2 for 2 start
+	    //-2 for 2 start
 	    //-3 for 2 end
 	    //1 for walls
-		if(numP == 1 )
-		{
-			if(difficulty == 1)
-			{
-			    int[] a1 = {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1};
-			    int[] a2 = {1,2,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,1};
-			    int[] a3 = {1,0,1,0,1,0,1,0,0,0,0,0,1,1,1,0,1,0,1};
-			    int[] a4 = {1,0,1,0,1,0,1,1,1,1,0,1,0,0,1,0,1,0,1};
-			    int[] a5 = {1,0,1,1,1,0,1,0,0,0,0,0,1,0,1,1,1,0,1};
-		     	    int[] a6 = {1,0,0,0,0,0,1,0,1,0,1,1,0,0,0,0,0,3,1};
-			    int[] a7 = {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1};
-			    int[][] b1 = {a1, a2, a3, a4, a5, a6, a7};
-			    return b1;
-			}
-			else if(difficulty == 2)
-			{
-			    int[] a1 = {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1};
-			    int[] a2 = {1,2,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,1};
-			    int[] a3 = {1,0,1,0,1,0,1,0,0,0,0,0,1,1,1,0,1,0,1};
-			    int[] a4 = {1,0,1,0,1,0,1,1,1,1,0,1,0,0,1,0,1,0,1};
-			    int[] a5 = {1,0,1,1,1,0,1,0,0,0,0,0,1,0,1,1,1,0,1};
-		     	    int[] a6 = {1,0,0,0,0,0,1,0,1,0,1,1,0,0,0,0,0,3,1};
-			    int[] a7 = {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1};
-			    int[][] b1 = {a1, a2, a3, a4, a5, a6, a7};
-			    return b1;
-			}
-			else
-			{
-			    int[] a1 = {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1};
-			    int[] a2 = {1,2,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,1};
-			    int[] a3 = {1,0,1,0,1,0,1,0,0,0,0,0,1,1,1,0,1,0,1};
-			    int[] a4 = {1,0,1,0,1,0,1,1,1,1,0,1,0,0,1,0,1,0,1};
-			    int[] a5 = {1,0,1,1,1,0,1,0,0,0,0,0,1,0,1,1,1,0,1};
-		     	    int[] a6 = {1,0,0,0,0,0,1,0,1,0,1,1,0,0,0,0,0,3,1};
-			    int[] a7 = {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1};
-			    int[][] b1 = {a1, a2, a3, a4, a5, a6, a7};
-			    return b1;
-			}
-		}
-		else 
-		{	
-			if(difficulty == 1)
-			{
-			    int[] a1 = {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1};
-			    int[] a2 = {1,2,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,1};
-			    int[] a3 = {1,0,1,0,1,0,1,0,0,0,0,0,1,1,1,0,1,0,1};
-			    int[] a4 = {1,0,1,0,1,0,1,1,1,1,0,1,0,0,1,0,1,0,1};
-			    int[] a5 = {1,0,1,1,1,0,1,0,0,0,0,0,-2,0,1,1,1,0,1};
-		     	    int[] a6 = {1,-3,0,0,0,0,1,0,1,0,1,1,0,0,0,0,0,3,1};
-			    int[] a7 = {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1};
-			    int[][] b1 = {a1, a2, a3, a4, a5, a6, a7};
-			    return b1;
-			}
-			else if(difficulty == 2)
-			{
-			    int a1[] = {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1};
-			    int[] a2 = {1,2,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,1};
-			    int[] a3 = {1,0,1,0,1,0,1,0,0,0,0,0,1,1,1,0,1,0,1};
-			    int[] a4 = {1,0,1,0,1,0,1,1,1,1,0,1,0,0,1,0,1,0,1};
-			    int[] a5 = {1,0,1,1,1,0,1,0,0,0,0,0,-2,0,1,1,1,0,1};
-		     	    int[] a6 = {1,-3,0,0,0,0,1,0,1,0,1,1,0,0,0,0,0,3,1};
-			    int[] a7 = {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1};
-			    int[][] b1 = {a1, a2, a3, a4, a5, a6, a7};
-			    return b1;
-			}
-			else
-			{
-			    int a1[] = {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1};
-			    int[] a2 = {1,2,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,1};
-			    int[] a3 = {1,0,1,0,1,0,1,0,0,0,0,0,1,1,1,0,1,0,1};
-			    int[] a4 = {1,0,1,0,1,0,1,1,1,1,0,1,0,0,1,0,1,0,1};
-			    int[] a5 = {1,0,1,1,1,0,1,0,0,0,0,0,-2,0,1,1,1,0,1};
-		     	    int[] a6 = {1,-3,0,0,0,0,1,0,1,0,1,1,0,0,0,0,0,3,1};
-			    int[] a7 = {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1};
-			    int[][] b1 = {a1, a2, a3, a4, a5, a6, a7};
-			    return b1;
-			}
-		}
-			
+            String s = numP + "" + difficulty;
+            String path = "src\\text\\" + s + ".txt";
+            Scanner scan = null;
+            try {
+            scan = new Scanner(new File(path)); }catch(Exception e){e.printStackTrace();}
+            String line = scan.nextLine();
+            ArrayList<Integer[]> list = new ArrayList();
+            while(!line.equals("")){
+              
+                String[] lineList = line.split(",");
+                Integer[] intList = new Integer[lineList.length];
+                for(int i = 0; i < intList.length; i++){
+                    intList[i] = Integer.parseInt(lineList[i]);
+                }
+                list.add(intList);
+                try{
+                    line = scan.nextLine();
+                }catch (java.util.NoSuchElementException e){
+                    break;
+                }
+            }
+            int [][] ret = new int[list.size()][list.get(0).length];
+            for(int i = 0; i < ret.length; i++){
+                for(int j = 0; j < ret[0].length; j++){
+                    
+                    ret[i][j] = list.get(i)[j];
+                    
+                }
+            }
+            return ret;
 	  }
 	
 	public static ArrayList<String> getNames() throws FileNotFoundException
@@ -141,12 +99,13 @@ public class FileMngr
 	public static ArrayList<Integer> getScores() throws FileNotFoundException
 	{
 		ArrayList<Integer> scorelist = new ArrayList<>(); // initialize score list
-		Scanner fileIn = new Scanner(new File("/Users/umitcanhasbioglu/Desktop/scores.txt"));
+		Scanner fileIn = new Scanner(new File("C:\\Users\\LUL\\Documents\\NetBeansProjects\\test\\src\\text\\scores.txt"));
 		for(int i=0;i<5;i++)
 		{
 			String s = fileIn.next();
 			int x = Integer.parseInt(s);
 			scorelist.add(x);
+                        System.out.println(x);
 		}
 		return scorelist;
 	}
@@ -188,8 +147,33 @@ public class FileMngr
 		content = content.replaceAll( oldScore , newScore );
 		Files.write(path, content.getBytes(charset));
 
+                ArrayList<String> fileContent = new ArrayList<>(Files.readAllLines(path, StandardCharsets.UTF_8));
+                for (int i = 0; i < 5; i++) {
+                    if (fileContent.get(i).equals(oldScore)) {
+                        fileContent.set(i, newScore);
+                        break;
+                    }
+                }
+
+                Files.write(path, fileContent, StandardCharsets.UTF_8);
 		
 	}
+        
+        public static AudioInputStream[] getMusic(){
+            
+            String file1 = "src\\sound\\1.wav";
+            String file2 = "src\\sound\\2.wav";
+            AudioInputStream[] in = new AudioInputStream[2];
+            try {
+                for(int i = 0; i < 2; i++){
+                    AudioInputStream audioStream = AudioSystem.getAudioInputStream(new File("src\\sound\\" + (i + 1) + ".wav"));
+                    in[i] = audioStream;
+                }
+            } catch (Exception e) {
+                
+            }
+            return in;
+}
 	
 	
 }
