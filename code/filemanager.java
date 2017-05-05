@@ -118,11 +118,10 @@ public class FileManager
 		for(int i=0;i<5;i++)
 		{
 		String oldName = fileIn.next();
-		String s = listX.get(i);
 		Path path = Paths.get("/Users/umitcanhasbioglu/Desktop/names.txt");
 		Charset charset = StandardCharsets.UTF_8;
 		String content = new String(Files.readAllBytes(path), charset);
-		content = content.replaceAll( oldName , s);
+		content = content.replaceAll( oldName , "");
 		Files.write(path, content.getBytes(charset));
 		}
 		for(int i=0;i<5;i++)
