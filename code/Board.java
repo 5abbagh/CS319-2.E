@@ -58,7 +58,7 @@ public class Board extends JPanel implements ActionListener {
     private Boolean isPaused = false;
     private JPanel containerPanel;
     private boolean isEnded = false;
-    private long lastBonusTime;
+    private long lastBonusTime= System.currentTimeMillis();
     private int level;
     //Initializers
     
@@ -156,6 +156,7 @@ public class Board extends JPanel implements ActionListener {
         LifeImage =imageList.get(8);
         ScoreImage = imageList.get(9);
         SpeedImage = imageList.get(10);
+        BonusImage = imageList.get(11);
     }
     
     //Continious Update Part
@@ -166,7 +167,7 @@ public class Board extends JPanel implements ActionListener {
                 updateBombs();
                 updatePatrols();
                 updateResults();
-                //updateBonuses();
+                updateBonuses();
             }
             ui.repaint();
         }catch(Exception ex){
