@@ -5,7 +5,9 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.io.Console;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
@@ -13,6 +15,9 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+
+import mazerunner.BoardUI.MyKeysAdapter;
+
 import java.awt.Font;
 
 public class MainMenu extends JPanel
@@ -25,14 +30,16 @@ public class MainMenu extends JPanel
 	int level;
 	ArrayList<JLabel> labels;
 	ArrayList<JButton> buttons;
+	private MyMouse keys = new MyMouse();
 	
 	// Constructor
-	public MainMenu()
+	public MainMenu( Console cn)
 	{
-		super();
+		//super();
+		console = cn;
 		this.setPreferredSize(new Dimension(1366,768));
 		setLayout(null);
-		
+		level = 1;
 		labels = new ArrayList<JLabel>();
 		buttons = new ArrayList<JButton>();
 		
@@ -42,6 +49,7 @@ public class MainMenu extends JPanel
 		singlePlayer.setBounds(837, 211, 172, 29);
 		add(singlePlayer);
 		labels.add(singlePlayer);
+		singlePlayer.addMouseListener(keys);
 		
 		JLabel multiplayer = new JLabel("Multiplayer");
 		multiplayer.setHorizontalAlignment(SwingConstants.CENTER);
@@ -49,6 +57,7 @@ public class MainMenu extends JPanel
 		multiplayer.setBounds(837, 281, 172, 29);
 		add(multiplayer);
 		labels.add(multiplayer);
+		multiplayer.addMouseListener(keys);
 		
 		JLabel diff = new JLabel("Difficulty");
 		diff.setHorizontalAlignment(SwingConstants.CENTER);
@@ -56,6 +65,7 @@ public class MainMenu extends JPanel
 		diff.setBounds(603, 365, 172, 29);
 		add(diff);
 		labels.add(diff);
+		diff.addMouseListener(keys);
 		
 		JLabel lblLeaderboard = new JLabel("Leaderboard");
 		lblLeaderboard.setHorizontalAlignment(SwingConstants.CENTER);
@@ -63,6 +73,7 @@ public class MainMenu extends JPanel
 		lblLeaderboard.setBounds(837, 473, 172, 29);
 		add(lblLeaderboard);
 		labels.add(lblLeaderboard);
+		lblLeaderboard.addMouseListener(keys);
 		
 		JLabel lblTutorials = new JLabel("Tutorials");
 		lblTutorials.setHorizontalAlignment(SwingConstants.CENTER);
@@ -70,6 +81,7 @@ public class MainMenu extends JPanel
 		lblTutorials.setBounds(837, 527, 172, 29);
 		add(lblTutorials);
 		labels.add(lblTutorials);
+		lblTutorials.addMouseListener(keys);
 		
 		JLabel lblCredits = new JLabel("Credits");
 		lblCredits.setHorizontalAlignment(SwingConstants.CENTER);
@@ -77,6 +89,7 @@ public class MainMenu extends JPanel
 		lblCredits.setBounds(837, 576, 172, 29);
 		add(lblCredits);
 		labels.add(lblCredits);
+		lblCredits.addMouseListener(keys);
 		
 		JLabel lblExit = new JLabel("Exit");
 		lblExit.setHorizontalAlignment(SwingConstants.CENTER);
@@ -84,24 +97,28 @@ public class MainMenu extends JPanel
 		lblExit.setBounds(837, 622, 172, 29);
 		add(lblExit);
 		labels.add(lblExit);
+		lblExit.addMouseListener(keys);;
 		
 		JButton btnEasy = new JButton("Easy");
 		btnEasy.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		btnEasy.setBounds(800, 344, 75, 75);
 		add(btnEasy);
 		buttons.add(btnEasy);
+		btnEasy.addMouseListener(keys);
 		
 		JButton btnNormal = new JButton("Normal");
 		btnNormal.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		btnNormal.setBounds(937, 344, 97, 75);
 		add(btnNormal);
 		buttons.add(btnNormal);
+		btnNormal.addMouseListener(keys);
 		
 		JButton btnHard = new JButton("Hard");
 		btnHard.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		btnHard.setBounds(1092, 344, 75, 75);
 		add(btnHard);
 		buttons.add(btnHard);
+		btnHard.addMouseListener(keys);
 		
 	}
 	
@@ -137,54 +154,96 @@ public class MainMenu extends JPanel
     }
 	
 	
+	
 	// Inner Class MyKeysAdapter
-    private class MyKeysAdapter extends KeyAdapter 
+    public class MyMouse extends MouseAdapter 
     {
-    	
+    	//System.out.println("Here4");
         @Override
-        public void keyPressed(KeyEvent e) 
+        public void mousePressed (MouseEvent e) 
         {
-        	int keyCode = e.getKeyCode();
-        	if ( keyCode == KeyEvent.VK_UP )
+        	System.out.println("HERE");
+        	if ( e.getSource() instanceof JLabel )
         	{
-        		if (labelSelected > 0)
-        			labelSelected--;
-        	}
-        	else if ( keyCode == KeyEvent.VK_DOWN )
+//        	if ( (JLabel) e.getSource()  == labels.get(0) )
+//        	{
+//        		console.selectOpt( 1, level + 1);
+//        	}
+//        	else if ( (JLabel) e.getSource() == labels.get(1) )
+//        	{
+//        		console.selectOpt( 2, level + 1);
+//        	}
+//        	if ( (JLabel) e.getSource() == labels.get(3) )
+//        	{
+//        		console.selectOpt( 3, -1);
+//        	}
+        	 if ( (JLabel) e.getSource() == labels.get(4) )
         	{
-        		if (labelSelected < 6)
-        			labelSelected++;
+        		console.selectOpt( 4, -1);
         	}
-        	else if ( keyCode == KeyEvent.VK_LEFT )
+        	}
+        	else if ( e.getSource() instanceof JButton)
         	{
-        		if (labelSelected == 2 )
-        		{
-        			if (buttonSelected > 0 )
-        				buttonSelected--;
-        		}
-        	}
-        	else if ( keyCode == KeyEvent.VK_RIGHT )
+        	 if ( (JButton) e.getSource() == buttons.get(0) )
         	{
-        		if (labelSelected == 2 )
-        		{
-        			if (buttonSelected < 2 )
-        				buttonSelected++;
-        		}
+        		level = 1;
         	}
-        	else if ( keyCode == KeyEvent.VK_ENTER )
+        	else if ( (JButton) e.getSource() == buttons.get(1) )
         	{
-        		if ( labelSelected == 2 )
-        		{
-        			level = buttonSelected;
-        		}
-        		else
-        		{
-        			console.selectOption( labelSelected, level);
-        		}
+        		level = 2;
         	}
-        	repaint();
+        	else if ( (JButton) e.getSource() == buttons.get(2) )
+        	{
+        		level = 3;
+        	}
+        	}
+//        	int keyCode = e.getKeyCode();
+//        	if ( keyCode == KeyEvent.VK_UP )
+//        	{
+//        		if (labelSelected > 0)
+//        			labelSelected--;
+//        	}
+//        	else if ( keyCode == KeyEvent.VK_DOWN )
+//        	{
+//        		if (labelSelected < 6)
+//        			labelSelected++;
+//        	}
+//        	else if ( keyCode == KeyEvent.VK_LEFT )
+//        	{
+//        		if (labelSelected == 2 )
+//        		{
+//        			if (buttonSelected > 0 )
+//        				buttonSelected--;
+//        		}
+//        	}
+//        	else if ( keyCode == KeyEvent.VK_RIGHT )
+//        	{
+//        		if (labelSelected == 2 )
+//        		{
+//        			if (buttonSelected < 2 )
+//        				buttonSelected++;
+//        		}
+//        	}
+//        	else if ( keyCode == KeyEvent.VK_ENTER )
+//        	{
+//        		if ( labelSelected == 2 )
+//        		{
+//        			level = buttonSelected;
+//        		}
+//        		else
+//        		{
+//         			if ( labelSelected < 2 )
+//         			{
+//         				console.selectOption( labelSelected + 2, level + 1);
+//         			}
+//         			if ( labelSelected > 2 )
+//         			{
+//         				console.selectOption( labelSelected + 1, -1);
+//         			}
+//        		}
+        	}
+        	//repaint();
         }
     }
 
     
-}
