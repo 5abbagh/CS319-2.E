@@ -523,15 +523,84 @@ public class Board extends JPanel implements ActionListener {
             }
     }
     
+    private String nameToSave = "";
     //End Game
     public void endGame(boolean successfulFinish, Pacman player){
-        /*
-        if(!successfulFinish)
-            console.setOption(0);
-        else{
-            if(player.getScore() > fileManager.getHighscores()[5])
-                console.setOption(5);
-        }*/
+        try{
+            if(successfulFinish){
+                 // create a jframe
+            JFrame frame = new JFrame();
+
+            // show a joptionpane dialog using showMessageDialog
+            JOptionPane.showMessageDialog(frame,
+                "You SUCK at this game","GIT GUD",JOptionPane.INFORMATION_MESSAGE,
+                new ImageIcon("src\\img\\mid.png"));
+            }
+                //console.setOption(0);
+            
+            else{
+                boolean saved = false;
+                ArrayList<Integer> scores = fileManager.getScores();
+                ArrayList<String> names = fileManager.getNames();
+                if(player.getScore() > fileManager.getScores().get(4)){
+                    SaveScore sc = new SaveScore(this);
+                    sc.run();
+                    this.pause(true);
+                    if(player.getScore() > fileManager.getScores().get(3))
+                        if(player.getScore() > fileManager.getScores().get(2))
+                            if(player.getScore() > fileManager.getScores().get(1))
+                                if(player.getScore() > fileManager.getScores().get(0))
+                                {
+                                    names.add(0,nameToSave);
+                                    scores.add(0,player.getScore());
+                                    saved = true;
+                                }
+                                else{
+                                    names.add(1,nameToSave);
+                                    scores.add(1,player.getScore());
+                                    saved = true;
+  
+                                }
+                            else{
+                                names.add(2,nameToSave);
+                                    scores.add(2,player.getScore());
+                                saved = true;
+             
+                            }
+                        else{
+                            names.add(3,nameToSave);
+                            scores.add(3,player.getScore());
+                            saved = true;
+                 
+                        }
+                    else{
+                        names.add(4,nameToSave);
+                        scores.add(4,player.getScore());
+                        saved = true;
+                   
+                    }
+                }
+                if(saved){
+                    if(!nameToSave.equals("")){
+                        out(scores);
+                        out(names);
+                        ArrayList<Integer> newScores = new ArrayList();
+                        ArrayList<String> newNames = new ArrayList();
+                        for(int i = 0; i < 5; i ++){
+                            newScores.add(scores.get(i));
+                            newNames.add(names.get(i));
+                        }
+                        out(newScores);
+                        out(newNames);
+                        fileManager.changeScores(newScores);
+                        fileManager.changeNames(newNames);
+                    }
+                }
+                    //console.setOption(5);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
     public void keyPressed(int[] key){
         for(int k = 0; k < key.length; k++)
