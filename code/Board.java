@@ -454,23 +454,27 @@ public class Board extends JPanel implements ActionListener {
         }
     }    
     private void updateBonuses(){
-        if(System.currentTimeMillis() > lastBonusTime + BONUS_TIME){
+    	
+        if(System.currentTimeMillis() > lastBonusTime + 22*1000){
             int indicator = (int)(Math.random() * 3);
-            int randX = (int)(Math.random()* WIDTH);
-            int randY = (int)(Math.random()* HEIGHT);
+            int randX = (int)(Math.random()* table[0].length)* unitWidth ;
+            int randY = (int)(Math.random()* table.length) * unitHeight;
             while(table[randY / unitHeight][randX / unitWidth] == 1){
-                randX = (int)(Math.random()* WIDTH);
-                randY = (int)(Math.random()* HEIGHT);
+            	randX = (int)(Math.random()* table[0].length)* unitWidth ;
+            	randY = (int)(Math.random()* table.length) * unitHeight;
             }
             switch(indicator){
                 case 0:
-                    bonuses.add(new LifeBonus(randX, randY, LifeImage, 2, unitWidth, unitHeight));
+                    bonuses.add(new SpeedBonus(randX, randY, BonusImage, 2, unitWidth, unitHeight));
+                    lastBonusTime = System.currentTimeMillis();
                     break;
                 case 1:
-                    bonuses.add(new LifeBonus(randX, randY, ScoreImage, 500, unitWidth, unitHeight));
+                    bonuses.add(new ScoreBonus(randX, randY, BonusImage, 500, unitWidth, unitHeight));
+                    lastBonusTime = System.currentTimeMillis();
                     break;
                 case 2:
-                    bonuses.add(new LifeBonus(randX, randY, SpeedImage, 1, unitWidth, unitHeight));
+                    bonuses.add(new LifeBonus(randX, randY, BonusImage, 1, unitWidth, unitHeight));
+                    lastBonusTime = System.currentTimeMillis();
                     break;
             }       
         }
@@ -482,11 +486,23 @@ public class Board extends JPanel implements ActionListener {
                 int playerYLoc = player.getY() / unitHeight;
                 int bonusXLoc = bonus.getX() / unitWidth;
                 int bonusYLoc = bonus.getY() / unitHeight;
-                if(playerXLoc == bonusXLoc && playerYLoc == bonusYLoc){
-                    bonus.bonus(player);
-                    bonuses.remove(j);
-                    j--;
+                if(System.currentTimeMillis() < lastBonusTime + 8*1000){
+                	if(playerXLoc == bonusXLoc && playerYLoc == bonusYLoc){
+                        bonus.bonus(player);
+                        bonuses.remove(j);
+                        j--;
+                    }
                 }
+                else{
+                	
+                	bonuses.remove(j);                	
+                	j--;
+                }
+            }
+            if(System.currentTimeMillis() > lastBonusTime + 10*1000){
+            	int currentSpeed = player.getSpeed();
+            	if(currentSpeed > PLAYER_SPEED)
+            		player.setSpeed(PLAYER_SPEED);
             }
         }
     }
