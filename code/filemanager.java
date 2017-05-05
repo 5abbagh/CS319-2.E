@@ -125,23 +125,53 @@ public class FileManager
 		content = content.replaceAll( oldName , s);
 		Files.write(path, content.getBytes(charset));
 		}
+		for(int i=0;i<5;i++)
+		{
+			try 
+			{
+				String b = listX.get(i);
+				String a = "" + b;
+	            FileWriter writer = new FileWriter("/Users/umitcanhasbioglu/Desktop/names.txt", true);
+	            writer.write(a +"\t");
+	            writer.close();
+	        } catch (IOException e) 
+			{
+	            e.printStackTrace();
+	        }
+		}
+		
+		
 	
 	}
 	
 	public static void changeScores(ArrayList<Integer> listX) throws IOException
 	{
+		
 		Scanner fileIn = new Scanner(new File("/Users/umitcanhasbioglu/Desktop/scores.txt"));
 		for(int i=0;i<5;i++)
 		{
 		String oldName = fileIn.next();
-		int s = listX.get(i);
-		String x = "" + s;
 		Path path = Paths.get("/Users/umitcanhasbioglu/Desktop/scores.txt");
 		Charset charset = StandardCharsets.UTF_8;
 		String content = new String(Files.readAllBytes(path), charset);
-		content = content.replaceAll( oldName , x);
+		content = content.replaceAll( oldName , "");
 		Files.write(path, content.getBytes(charset));
 		}
+		for(int i=0;i<5;i++)
+		{
+			try 
+			{
+				int a = listX.get(i);
+				String s = "" + a;
+	            FileWriter writer = new FileWriter("/Users/umitcanhasbioglu/Desktop/scores.txt", true);
+	            writer.write(s +"\t");
+	            writer.close();
+	        } catch (IOException e) 
+			{
+	            e.printStackTrace();
+	        }
+		}
+		
 	
 	}
         
