@@ -110,6 +110,11 @@ public class Console extends JFrame
 			setTitle(titles[4]);
             this.pack();
 		}
+		else if (panel == 6 )
+		{
+			System.exit(0);
+		}
+		repaint();
 		repaint();
 	}
         
