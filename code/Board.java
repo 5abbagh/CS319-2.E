@@ -1,3 +1,8 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package mazerunner;
 
 /**
@@ -8,25 +13,31 @@ package mazerunner;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileInputStream;
 import java.util.ArrayList;
+import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.Timer;
+//import sun.audio.ContinuousAudioDataStream;
+import javax.sound.sampled.AudioInputStream;
 
 public class Board extends JPanel implements ActionListener {
-    
     public int numP = 1;
-    public  final int WIDTH = 1400;
-    public  final int HEIGHT = 800;
+    public  final int WIDTH = 1368;
+    public  final int HEIGHT = 768;
     private final int PLAYER_SPEED = 10;
     private final int PATROL_SPEED = 1;
     private final int NUMBER_OF_SLOW_PATROLS = 0;
-    private final int NUMBER_OF_FAST_PATROLS = 1;
+    private final int NUMBER_OF_FAST_PATROLS = 3;
     private final int FAST_PATROL_RADIUS = 200;
     private final int DELAY = 5;
     private final int EXPLOSION_ANIMATION_DURATION = 1500;
     private final int BOMB_DURATION = 2000;
-    private final int BONUS_TIME = 1000000000;
+    private final int BONUS_TIME = 22;
+    private final int BASE_LAMP_NUM = 7;
+    private final int BASE_LAMP_RANGE = 50;
     
     private int gameLength = 60000;
     private long startTime;
@@ -37,10 +48,10 @@ public class Board extends JPanel implements ActionListener {
     private ArrayList<Bomb> bombs = new ArrayList<Bomb>();
     private ArrayList<Bonus> bonuses = new ArrayList<Bonus>();
     private FileManager fileManager = new FileManager();
-    
+    private Lamp[] lamps;
     private int[][] table;
     private int result = -1;
-    //private Console console;
+    private Console console;
     private BoardUI ui;
     private int unitWidth;
     private int unitHeight;
@@ -58,20 +69,32 @@ public class Board extends JPanel implements ActionListener {
     private Boolean isPaused = false;
     private JPanel containerPanel;
     private boolean isEnded = false;
-    private long lastBonusTime= System.currentTimeMillis();
+    private long lastBonusTime = System.currentTimeMillis();
     private int level;
     //Initializers
     
     public JPanel getGamePanel(){
         return  ui;
     }
-    public Board(int numberOfPlayers, int level, JPanel root ){
-        initBoard(numberOfPlayers, level, root, false);
+    public Board(int numberOfPlayers, int level, Console con ){
+        /*
+        try{
+        //fileManager.getScores();
+        }catch(Exception e){
+            e.printStackTrace();
+        }*/
+        initBoard(numberOfPlayers, level, con, false);
     }
     
-    private void initBoard(int numberOfPlayers, int level, JPanel root, boolean isRestart){
+    protected ArrayList<Pacman> getPlayers(){
+        return players;
+    }
+    
+    private void initBoard(int numberOfPlayers, int level, Console root, boolean isRestart){
+    	
         this.level = level;
-        containerPanel = root;
+        console = root;
+        containerPanel = root.getPanel();
         numP = numberOfPlayers;
         result = -1;
         gameLength *= level;
@@ -82,6 +105,7 @@ public class Board extends JPanel implements ActionListener {
         unitHeight = HEIGHT / table.length;
         patrols = initPatrols();
         players = initPlayers();
+        lamps = initLamps();
         timer = new Timer(DELAY, this);
         timer.start();
         if(!isRestart){
@@ -90,7 +114,25 @@ public class Board extends JPanel implements ActionListener {
             containerPanel.add(ui);
             containerPanel.revalidate();
         }
+        ui.initSounds(fileManager.getMusic());
+        ui.requestFocusInWindow(); 
     }
+    
+    protected Lamp[] getLamps(){
+        return lamps;
+    }
+    
+    private Lamp[] initLamps(){
+        int numLamps = (int) (BASE_LAMP_NUM * (1 + Math.random()) * level);
+        int range = (int) (BASE_LAMP_RANGE * (1 + Math.random()));
+        Lamp[] lamps = new Lamp[numLamps];
+        for(int i = 0; i < numLamps; i++){
+            int[] loc = getFreeIndex();
+            lamps[i] = new Lamp(loc[1] * unitWidth, loc[0] * unitHeight, null, 0, 0 , range);
+        }
+        return lamps;
+    }
+    
     private ArrayList<Pacman> initPlayers(){
         int[] locations = new int[8];
         for(int i = 0 ; i < table.length; i++)
@@ -124,25 +166,28 @@ public class Board extends JPanel implements ActionListener {
         return players;
     }
     private ArrayList<Patrol> initPatrols(){
-        ArrayList<Patrol> patrols = new ArrayList();
-        for(int i = 0; i < NUMBER_OF_SLOW_PATROLS; ){
-            int randomY = (int)(Math.random() * table.length);
-            int randomX = (int)(Math.random() * table[0].length);
-            if(table[randomY][randomX] == 0){
-                patrols.add(new Patrol(randomX * unitWidth, randomY * unitHeight, PATROL_SPEED, AIImage, false, unitWidth , unitHeight));
-                i++;
-            }
+        patrols = new ArrayList(NUMBER_OF_SLOW_PATROLS + NUMBER_OF_FAST_PATROLS);
+        for(int i = 0; i < NUMBER_OF_SLOW_PATROLS; i++){
+            int[] loc = getFreeIndex();
+            patrols.add(new Patrol(loc[1] * unitWidth, loc[0] * unitHeight, PATROL_SPEED, AIImage, false, unitWidth , unitHeight));
         }
-        for(int i = 0; i < NUMBER_OF_FAST_PATROLS; ){
-            int randomY = (int)(Math.random() * table.length);
-            int randomX = (int)(Math.random() * table[0].length);
-            if(table[randomY][randomX] == 0){
-                patrols.add(new Patrol(randomX * unitWidth, randomY * unitHeight, PATROL_SPEED, AI2Image, true, unitWidth , unitHeight));
-                i++;
-            }
+        for(int i = 0; i < NUMBER_OF_FAST_PATROLS; i++){
+            int[] loc = getFreeIndex();
+            patrols.add(new Patrol(loc[1] * unitWidth, loc[0] * unitHeight, PATROL_SPEED, AIImage, true, unitWidth , unitHeight));
         }
         return patrols;
     }
+    
+    private int[] getFreeIndex(){
+        int randomY = (int)(Math.random() * table.length);
+        int randomX = (int)(Math.random() * table[0].length);
+        int[] result = {randomY, randomX};
+        if(table[randomY][randomX] == 0){
+            return result;
+        }
+        return getFreeIndex();
+    }
+    
     private void initImages(){
         ArrayList<Image> imageList = fileManager.getImages();
         BombImage = imageList.get(0);
@@ -162,14 +207,20 @@ public class Board extends JPanel implements ActionListener {
     //Continious Update Part
     public void actionPerformed(ActionEvent e) {
         try{
+            
             if(!isEnded && !isPaused){
                 updatePlayer();
+                
                 updateBombs();
                 updatePatrols();
+                
                 updateResults();
+                
                 updateBonuses();
             }
             ui.repaint();
+           
+            containerPanel.repaint();
         }catch(Exception ex){
         }
     }
@@ -242,8 +293,6 @@ public class Board extends JPanel implements ActionListener {
         int lby = plannedY + obj.getHeight();
         int rbx = plannedX + obj.getWidth();
         int rby = plannedY + obj.getHeight();
-        //int unitWidth = player.getWidth();
-        //int unitHeight = player.getHeight();
         rby--;
         lby--;
         rbx--;
@@ -290,7 +339,6 @@ public class Board extends JPanel implements ActionListener {
             return false;
         }
         }catch(Exception e){
-            e.printStackTrace();
             return false;
         }
         return true;
@@ -313,7 +361,8 @@ public class Board extends JPanel implements ActionListener {
         }
     }
     private boolean patrolCollasion(Pacman player, Patrol patrol){
-        return Math.abs(player.getX() - patrol.getX()) < unitWidth && Math.abs(player.getY() - patrol.getY()) < unitHeight;
+        return Math.abs((player.getX() + player.getWidth() / 2) - (patrol.getX() + patrol.getWidth() / 2)) <  (player.getWidth() / 2) + (patrol.getWidth() / 2) && 
+               Math.abs((player.getY() + player.getHeight() / 2) - (patrol.getY() + patrol.getHeight() / 2)) <  (player.getHeight() / 2) + (patrol.getHeight() / 2);
     }    
     private void bombCollasion(Bomb bomb){
     	ArrayList<MovingObject> mortalObjects = new ArrayList();
@@ -323,6 +372,7 @@ public class Board extends JPanel implements ActionListener {
             mortalObjects.add(patrols.get(i));
         for(int i = 0; i < mortalObjects.size(); i++){
             MovingObject obj = mortalObjects.get(i);
+            boolean objCollided = false;
             int objXLoc = obj.getX() / unitWidth;
             int objYLoc = obj.getY() / unitHeight;
             int bombXLoc = bomb.getX() / unitWidth;
@@ -331,14 +381,14 @@ public class Board extends JPanel implements ActionListener {
                 if(table[bombYLoc][x + bombXLoc] == 1)
                     break;
                 else{
-                    if(x + bombXLoc == objXLoc){
-                        if(obj.getClass().getSimpleName().equals("Pacman"))
+                    if(x + bombXLoc == objXLoc && bombYLoc == objYLoc){
+                        if(obj.getClass().getSimpleName().equals("Pacman")){
                             if(bomb.getOwner().getPlayerNumber() != ((Pacman) obj).getPlayerNumber())
                                 bomb.getOwner().increaseScore(400);
+                        }    
                         else
                             bomb.getOwner().increaseScore(200);
-                        obj.die();
-                        System.out.println("LUL1");
+                        objCollided = true;
                     }
                     
                 }
@@ -346,14 +396,14 @@ public class Board extends JPanel implements ActionListener {
                 if(table[bombYLoc][x + bombXLoc] == 1)
                     break;
                 else{
-                    if(x + bombXLoc == objXLoc){
-                        if(obj.getClass().getSimpleName().equals("Pacman"))
+                    if(x + bombXLoc == objXLoc && bombYLoc == objYLoc){
+                        if(obj.getClass().getSimpleName().equals("Pacman")){
                             if(bomb.getOwner().getPlayerNumber() != ((Pacman) obj).getPlayerNumber())
                                 bomb.getOwner().increaseScore(400);
+                        }    
                         else
                             bomb.getOwner().increaseScore(200);
-                        obj.die();
-                        System.out.println("LUL2");
+                        objCollided = true;
                     }
                     
                 }
@@ -361,15 +411,14 @@ public class Board extends JPanel implements ActionListener {
                 if(table[bombYLoc + y][ bombXLoc] == 1)
                     break;
                 else{
-                    if(y + bombXLoc == objYLoc){
-                        obj.die();
-                        if(obj.getClass().getSimpleName().equals("Pacman"))
+                    if(y + bombYLoc == objYLoc && bombXLoc == objXLoc){
+                        if(obj.getClass().getSimpleName().equals("Pacman")){
                             if(bomb.getOwner().getPlayerNumber() != ((Pacman) obj).getPlayerNumber())
                                 bomb.getOwner().increaseScore(400);
+                        }    
                         else
                             bomb.getOwner().increaseScore(200);
-                        obj.die();
-                        System.out.println("LUL3");
+                        objCollided = true;
                     }
                     
                 }
@@ -377,17 +426,28 @@ public class Board extends JPanel implements ActionListener {
                 if(table[bombYLoc + y][ bombXLoc] == 1)
                     break;
                 else{
-                    if(y + bombXLoc == objYLoc){
-                        if(obj.getClass().getSimpleName().equals("Pacman"))
+                    if(y + bombYLoc == objYLoc && bombXLoc == objXLoc){
+                        if(obj.getClass().getSimpleName().equals("Pacman")){
                             if(bomb.getOwner().getPlayerNumber() != ((Pacman) obj).getPlayerNumber())
                                 bomb.getOwner().increaseScore(400);
+                        }
                         else
                             bomb.getOwner().increaseScore(200);
-                        obj.die();
-                        System.out.println("LUL4");
+                        objCollided = true;
                     }
                     
                 }
+            if(bombYLoc == objYLoc && bombXLoc == objXLoc){
+                if(obj.getClass().getSimpleName().equals("Pacman")){
+                    if(bomb.getOwner().getPlayerNumber() != ((Pacman) obj).getPlayerNumber())
+                                bomb.getOwner().increaseScore(400);
+                }
+                else
+                    bomb.getOwner().increaseScore(200);
+                objCollided = true;
+            }
+            if(objCollided)
+                obj.die();
         }
     }
     //Updaters
@@ -397,6 +457,7 @@ public class Board extends JPanel implements ActionListener {
             
             if(System.currentTimeMillis() > bomb.getPlantTime()+ BOMB_DURATION + EXPLOSION_ANIMATION_DURATION){
                 bombs.remove(i);
+                i--;
             }
             else if(bomb.isAvailableToExplosion(System.currentTimeMillis()) && !bomb.isExploded){
                 bomb.explode();
@@ -408,11 +469,11 @@ public class Board extends JPanel implements ActionListener {
     private void updatePatrols() {
         for(int i = 0; i < patrols.size(); i++){
             Patrol currentPatrol = patrols.get(i);
-            /*if(!currentPatrol.isAlive()){
+            if(!currentPatrol.isAlive()){
                 patrols.remove(i);
                 i--;
-            }*/
-            //else{
+            }
+            else{
                 ArrayList<Integer> list = new ArrayList();
                 for(int p = 1; p <= 4; p++){
                     if(moveCollide(currentPatrol, p))
@@ -428,22 +489,26 @@ public class Board extends JPanel implements ActionListener {
                         if(!currentPatrol.isFast())
                             currentPatrol.setSpeed(PATROL_SPEED * 2);
                         inRange = true;
+                        currentPatrol.image = AI2Image;
                     }
                     if(numP == 2)
                         if(currentPatrol.isInRange(players.get(1), FAST_PATROL_RADIUS)){
                             if(!currentPatrol.isFast())
                                 currentPatrol.setSpeed(PATROL_SPEED * 2);
                             inRange = true;
+                            currentPatrol.image = AI2Image;
                         }
-                    if(!inRange)
+                    if(!inRange){
                         currentPatrol.returnInitialSpeed();
+                        currentPatrol.image = AIImage;
+                    }
                 }
                 if(patrolCollasion(players.get(0), currentPatrol))
                     players.get(0).die();
                 if(numP == 2)
                     if(patrolCollasion(players.get(1), currentPatrol))
                         players.get(1).die();
-            //}
+            }
         }
     }   
     private void updatePlayer() {
@@ -508,26 +573,41 @@ public class Board extends JPanel implements ActionListener {
         }
     }
     private void updateResults(){
-        if(System.currentTimeMillis() > startTime + gameLength)
+        if(System.currentTimeMillis() > startTime + gameLength){
+            
             endGame(false, null);
-        for(int i = 0; i < players.size(); i++)
-            if(!players.get(i).isAlive())
-                endGame(false, null);
-            else{
-                    if(table[players.get(0).getY() / unitHeight][players.get(0).getX() / unitWidth] == 3)
-                        endGame(true,players.get(0));
-                    else if(numP == 2){
-                        if(table[players.get(1).getY() / unitHeight][players.get(1).getX() / unitWidth] == -3)
-                            endGame(true,players.get(1));
-                    }
-            }
+        }
+        else{
+            for(int i = 0; i < players.size(); i++){
+                
+               // out(players.get(0).isDead() + "-" + players.get(1).isDead());
+                if(table[players.get(0).getY() / unitHeight][players.get(0).getX() / unitWidth] == 3)
+                    endGame(true,players.get(0));
+                
+                if(numP == 2){
+                    if(table[players.get(1).getY() / unitHeight][players.get(1).getX() / unitWidth] == -3)
+                        endGame(true,players.get(1));
+                }
+                
+                if(players.get(0).isDead()){
+                    if(numP == 2)
+                        endGame(true, players.get(1));
+                }
+             
+                if(numP == 2)
+                    if(players.get(1).isDead()){
+                        endGame(true, players.get(0));
+                }
+            }    
+        }
     }
     
     private String nameToSave = "";
     //End Game
     public void endGame(boolean successfulFinish, Pacman player){
         try{
-            if(successfulFinish){
+            this.pause(true);
+            if(!successfulFinish){
                  // create a jframe
             JFrame frame = new JFrame();
 
@@ -535,73 +615,91 @@ public class Board extends JPanel implements ActionListener {
             JOptionPane.showMessageDialog(frame,
                 "You SUCK at this game","GIT GUD",JOptionPane.INFORMATION_MESSAGE,
                 new ImageIcon("src\\img\\mid.png"));
+            console.selectOpt(0,-1);
             }
-                //console.setOption(0);
+          
             
             else{
-                boolean saved = false;
-                ArrayList<Integer> scores = fileManager.getScores();
-                ArrayList<String> names = fileManager.getNames();
-                if(player.getScore() > fileManager.getScores().get(4)){
-                    SaveScore sc = new SaveScore(this);
-                    sc.run();
-                    this.pause(true);
-                    if(player.getScore() > fileManager.getScores().get(3))
-                        if(player.getScore() > fileManager.getScores().get(2))
-                            if(player.getScore() > fileManager.getScores().get(1))
-                                if(player.getScore() > fileManager.getScores().get(0))
-                                {
-                                    names.add(0,nameToSave);
-                                    scores.add(0,player.getScore());
-                                    saved = true;
-                                }
-                                else{
-                                    names.add(1,nameToSave);
-                                    scores.add(1,player.getScore());
-                                    saved = true;
-  
-                                }
-                            else{
-                                names.add(2,nameToSave);
-                                    scores.add(2,player.getScore());
-                                saved = true;
-             
-                            }
-                        else{
-                            names.add(3,nameToSave);
-                            scores.add(3,player.getScore());
-                            saved = true;
-                 
-                        }
-                    else{
-                        names.add(4,nameToSave);
-                        scores.add(4,player.getScore());
-                        saved = true;
-                   
+                if(numP == 1){
+                	if(player.getScore() > fileManager.getScores().get(4) && sc == null){
+                        sc = new SaveScore(this);
+                        sc.run();
                     }
                 }
-                if(saved){
-                    if(!nameToSave.equals("")){
-                        out(scores);
-                        out(names);
-                        ArrayList<Integer> newScores = new ArrayList();
-                        ArrayList<String> newNames = new ArrayList();
-                        for(int i = 0; i < 5; i ++){
-                            newScores.add(scores.get(i));
-                            newNames.add(names.get(i));
-                        }
-                        out(newScores);
-                        out(newNames);
-                        fileManager.changeScores(newScores);
-                        fileManager.changeNames(newNames);
-                    }
+                else{
+                	JFrame frame = new JFrame();
+                    JOptionPane.showMessageDialog(frame,
+                    "Player " + player.getPlayerNumber() + " won!","You won!",JOptionPane.INFORMATION_MESSAGE);
+                    //console.setOption();
                 }
-                    //console.setOption(5);
             }
         }catch (Exception e){
             e.printStackTrace();
         }
     }
+    
+    SaveScore sc = null;
+    
+    private void saveScore(){
+    	boolean saved = false;
+    	Pacman player = players.get(0);
+        ArrayList<Integer> scores = fileManager.getScores();
+        ArrayList<String> names = fileManager.getNames();
+        out("IN");
+        out(scores);
+        out(names);
+        
+            names.remove(4);
+            scores.remove(4);
+
+            if(player.getScore() > fileManager.getScores().get(3))
+                if(player.getScore() > fileManager.getScores().get(2))
+                    if(player.getScore() > fileManager.getScores().get(1))
+                        if(player.getScore() > fileManager.getScores().get(0))
+                        {
+                            names.add(0,nameToSave);
+                            scores.add(0,player.getScore());
+                            saved = true;
+                        }
+                        else{
+                            names.add(1,nameToSave);
+                            scores.add(1,player.getScore());
+                            saved = true;
+
+                        }
+                    else{
+                        names.add(2,nameToSave);
+                            scores.add(2,player.getScore());
+                        saved = true; 
+
+                    }
+                else{
+                    names.add(3,nameToSave);
+                    scores.add(3,player.getScore());
+                    saved = true;
+
+                }
+            else{
+                names.add(4,nameToSave);
+                scores.add(4,player.getScore());
+                saved = true;
+
+            }
+
+        
+        if(saved){
+            if(!nameToSave.equals("")){
+                out(scores);
+                out(names);
+                fileManager.changeScores(scores);
+                fileManager.changeNames(names);
+                sc = null;
+               
+            }
+        }
+        gotoMain();
+    }
+    
     public void keyPressed(int[] key){
         for(int k = 0; k < key.length; k++)
             if(key[k] != -1){
@@ -617,7 +715,7 @@ public class Board extends JPanel implements ActionListener {
     }
     
     public void restart(){
-        initBoard(numP, level, containerPanel, true);
+        initBoard(numP, level, console, true);
     }
     //Key Evaluation
     public void keyPressed(int key){
@@ -734,6 +832,11 @@ public class Board extends JPanel implements ActionListener {
                 break;
         }
     }
+    public void gotoMain(){
+    	this.pause(true);
+    	System.out.println("invoked");
+    	console.selectOpt(0, -1);
+    }
     public int determineKeyUser(int key){
         int[] p1Keys = {81,69,65,68,87,83};
         for(int i : p1Keys)
@@ -752,5 +855,108 @@ public class Board extends JPanel implements ActionListener {
         
         return -1;
     }
-}
+    
+    
+    class SaveScore extends javax.swing.JFrame {
 
+        /**
+         * Creates new form SaveScore
+         */
+            Board board;
+        public SaveScore(Board b) {
+            board = b;
+            initComponents();
+        }
+
+        /**
+         * This method is called from within the constructor to initialize the form.
+         * WARNING: Do NOT modify this code. The content of this method is always
+         * regenerated by the Form Editor.
+         */
+        @SuppressWarnings("unchecked")
+        // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
+        private void initComponents() {
+        	//setVisible(true);
+            prompt = new javax.swing.JLabel();
+            OKButton = new javax.swing.JButton();
+            jScrollPane1 = new javax.swing.JScrollPane();
+            textArea = new javax.swing.JTextArea();
+
+            setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+
+            prompt.setText("Please Enter Your Name");
+
+            OKButton.setText("OK");
+            OKButton.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    if(!textArea.getText().equals("")){
+                        nameToSave = textArea.getText();
+                        board.pause(false);
+                        sc = null;
+                    }
+                }
+            });
+
+            textArea.setColumns(20);
+            textArea.setFont(new java.awt.Font("Monospaced", 0, 18)); // NOI18N
+            textArea.setRows(5);
+            textArea.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+            jScrollPane1.setViewportView(textArea);
+
+            javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+            getContentPane().setLayout(layout);
+            layout.setHorizontalGroup(
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(18, 18, 18)
+                    .addComponent(OKButton)
+                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(prompt, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(72, 72, 72))
+            );
+            layout.setVerticalGroup(
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(prompt)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                            .addGap(18, 18, 18)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createSequentialGroup()
+                            .addGap(34, 34, 34)
+                            .addComponent(OKButton)))
+                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            );
+
+            pack();
+            setLocationRelativeTo(null);
+            setVisible(true);
+        }// </editor-fold>                                                 
+        
+        public void run() {
+        	try {
+        	board.pause(true);
+            //new SaveScore(board);
+        	}catch(Exception e){
+        		e.printStackTrace();
+        	}
+        }
+        
+        /**
+         * @param args the command line arguments
+         */
+        
+
+        // Variables declaration - do not modify                     
+        private javax.swing.JButton OKButton;
+        private javax.swing.JScrollPane jScrollPane1;
+        private javax.swing.JLabel prompt;
+        private javax.swing.JTextArea textArea;
+        // End of variables declaration                   
+    }
+}
