@@ -25,8 +25,8 @@ public class MainMenu extends JPanel
 	
 	// Properties
 	Console console;
-	int labelSelected;
-	int buttonSelected;
+	int labelSelected = 0;
+	int buttonSelected = 1;
 	int level;
 	ArrayList<JLabel> labels;
 	ArrayList<JButton> buttons;
@@ -36,6 +36,8 @@ public class MainMenu extends JPanel
 	public MainMenu( Console cn)
 	{
 		//super();
+		
+		this.addKeyListener(new MyMouse());
 		console = cn;
 		this.setPreferredSize(new Dimension(1366,768));
 		setLayout(null);
@@ -49,7 +51,7 @@ public class MainMenu extends JPanel
 		singlePlayer.setBounds(837, 211, 172, 29);
 		add(singlePlayer);
 		labels.add(singlePlayer);
-		singlePlayer.addMouseListener(keys);
+		//singlePlayer.addMouseListener(keys);
 		
 		JLabel multiplayer = new JLabel("Multiplayer");
 		multiplayer.setHorizontalAlignment(SwingConstants.CENTER);
@@ -57,7 +59,7 @@ public class MainMenu extends JPanel
 		multiplayer.setBounds(837, 281, 172, 29);
 		add(multiplayer);
 		labels.add(multiplayer);
-		multiplayer.addMouseListener(keys);
+		//multiplayer.addMouseListener(keys);
 		
 		JLabel diff = new JLabel("Difficulty");
 		diff.setHorizontalAlignment(SwingConstants.CENTER);
@@ -65,7 +67,7 @@ public class MainMenu extends JPanel
 		diff.setBounds(603, 365, 172, 29);
 		add(diff);
 		labels.add(diff);
-		diff.addMouseListener(keys);
+		//diff.addMouseListener(keys);
 		
 		JLabel lblLeaderboard = new JLabel("Leaderboard");
 		lblLeaderboard.setHorizontalAlignment(SwingConstants.CENTER);
@@ -73,7 +75,7 @@ public class MainMenu extends JPanel
 		lblLeaderboard.setBounds(837, 473, 172, 29);
 		add(lblLeaderboard);
 		labels.add(lblLeaderboard);
-		lblLeaderboard.addMouseListener(keys);
+		//lblLeaderboard.addMouseListener(keys);
 		
 		JLabel lblTutorials = new JLabel("Tutorials");
 		lblTutorials.setHorizontalAlignment(SwingConstants.CENTER);
@@ -81,7 +83,7 @@ public class MainMenu extends JPanel
 		lblTutorials.setBounds(837, 527, 172, 29);
 		add(lblTutorials);
 		labels.add(lblTutorials);
-		lblTutorials.addMouseListener(keys);
+		//lblTutorials.addMouseListener(keys);
 		
 		JLabel lblCredits = new JLabel("Credits");
 		lblCredits.setHorizontalAlignment(SwingConstants.CENTER);
@@ -89,7 +91,7 @@ public class MainMenu extends JPanel
 		lblCredits.setBounds(837, 576, 172, 29);
 		add(lblCredits);
 		labels.add(lblCredits);
-		lblCredits.addMouseListener(keys);
+		//lblCredits.addMouseListener(keys);
 		
 		JLabel lblExit = new JLabel("Exit");
 		lblExit.setHorizontalAlignment(SwingConstants.CENTER);
@@ -97,28 +99,28 @@ public class MainMenu extends JPanel
 		lblExit.setBounds(837, 622, 172, 29);
 		add(lblExit);
 		labels.add(lblExit);
-		lblExit.addMouseListener(keys);;
+		//lblExit.addMouseListener(keys);;
 		
 		JButton btnEasy = new JButton("Easy");
 		btnEasy.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		btnEasy.setBounds(800, 344, 75, 75);
 		add(btnEasy);
 		buttons.add(btnEasy);
-		btnEasy.addMouseListener(keys);
+		//btnEasy.addMouseListener(keys);
 		
 		JButton btnNormal = new JButton("Normal");
 		btnNormal.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		btnNormal.setBounds(937, 344, 97, 75);
 		add(btnNormal);
 		buttons.add(btnNormal);
-		btnNormal.addMouseListener(keys);
+		//btnNormal.addMouseListener(keys);
 		
 		JButton btnHard = new JButton("Hard");
 		btnHard.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		btnHard.setBounds(1092, 344, 75, 75);
 		add(btnHard);
 		buttons.add(btnHard);
-		btnHard.addMouseListener(keys);
+		//btnHard.addMouseListener(keys);
 		
 	}
 	
@@ -137,10 +139,12 @@ public class MainMenu extends JPanel
         		buttons.get(i).setSelected(false);
         	if (level == i )
         	{
-        		buttons.get(i).setBackground(Color.GREEN);
+        		buttons.get(i).setBackground(Color.ORANGE);
         	}
+        	else if(buttonSelected == i)
+        		buttons.get(i).setBackground(Color.YELLOW);
         	else
-        		buttons.get(i).setBackground(new JButton().getBackground());
+        		buttons.get(i).setBackground(Color.GRAY);
         }
         for ( int i = 0; i < 7; i++ )
         {
@@ -156,12 +160,13 @@ public class MainMenu extends JPanel
 	
 	
 	// Inner Class MyKeysAdapter
-    public class MyMouse extends MouseAdapter 
+    public class MyMouse extends KeyAdapter 
     {
     	//System.out.println("Here4");
         @Override
-        public void mousePressed (MouseEvent e) 
+        public void keyPressed (KeyEvent e) 
         {
+        	/*
         	System.out.println("HERE");
         	if ( e.getSource() instanceof JLabel )
         	{
@@ -197,53 +202,53 @@ public class MainMenu extends JPanel
         		level = 3;
         	}
         	}
-//        	int keyCode = e.getKeyCode();
-//        	if ( keyCode == KeyEvent.VK_UP )
-//        	{
-//        		if (labelSelected > 0)
-//        			labelSelected--;
-//        	}
-//        	else if ( keyCode == KeyEvent.VK_DOWN )
-//        	{
-//        		if (labelSelected < 6)
-//        			labelSelected++;
-//        	}
-//        	else if ( keyCode == KeyEvent.VK_LEFT )
-//        	{
-//        		if (labelSelected == 2 )
-//        		{
-//        			if (buttonSelected > 0 )
-//        				buttonSelected--;
-//        		}
-//        	}
-//        	else if ( keyCode == KeyEvent.VK_RIGHT )
-//        	{
-//        		if (labelSelected == 2 )
-//        		{
-//        			if (buttonSelected < 2 )
-//        				buttonSelected++;
-//        		}
-//        	}
-//        	else if ( keyCode == KeyEvent.VK_ENTER )
-//        	{
-//        		if ( labelSelected == 2 )
-//        		{
-//        			level = buttonSelected;
-//        		}
-//        		else
-//        		{
-//         			if ( labelSelected < 2 )
-//         			{
-//         				console.selectOption( labelSelected + 2, level + 1);
-//         			}
-//         			if ( labelSelected > 2 )
-//         			{
-//         				console.selectOption( labelSelected + 1, -1);
-//         			}
-//        		}
+        	*/
+        	int keyCode = ((KeyEvent) e).getKeyCode();
+        	if ( keyCode == KeyEvent.VK_UP )
+        	{
+        		if (labelSelected > 0)
+        			labelSelected--;
         	}
-        	//repaint();
+        	else if ( keyCode == KeyEvent.VK_DOWN )
+        	{
+        		if (labelSelected < 6)
+        			labelSelected++;
+        	}
+        	else if ( keyCode == KeyEvent.VK_LEFT )
+        	{
+        		if (labelSelected == 2 )
+        		{
+        			if (buttonSelected > 0 )
+        				buttonSelected--;
+        		}
+        	}
+        	else if ( keyCode == KeyEvent.VK_RIGHT )
+        	{
+        		System.out.println(labelSelected);
+        		if (labelSelected == 2 )
+        		{
+        			if (buttonSelected < 2 )
+        				buttonSelected++;
+        		}
+        	}
+        	else if ( keyCode == KeyEvent.VK_ENTER )
+        	{
+        		if ( labelSelected == 2 )
+        		{
+        			level = buttonSelected;
+        		}
+        		else
+        		{
+         			if ( labelSelected < 2 )
+         			{
+         				console.selectOpt( labelSelected + 1 , level);
+         			}
+         			if ( labelSelected > 2 )
+         			{
+         				console.selectOpt( labelSelected , -1);
+         			}
+        		}
+        	}
+        	repaint();
         }
-    }
-
-    
+    }}
