@@ -157,7 +157,14 @@ public class MainMenu extends JPanel
         }
     }
 	
-	
+	public void keyPressed(KeyEvent e){
+    	keys.keyPressed(e);
+    }
+    
+    public void keyReleased(KeyEvent e){
+
+    	keys.keyReleased(e);
+    }
 	
 	// Inner Class MyKeysAdapter
     public class MyMouse extends KeyAdapter 
@@ -241,7 +248,7 @@ public class MainMenu extends JPanel
         		{
          			if ( labelSelected < 2 )
          			{
-         				console.selectOpt( labelSelected + 1 , level);
+         				console.selectOpt( labelSelected + 1 , level + 1);
          			}
          			if ( labelSelected > 2 )
          			{
