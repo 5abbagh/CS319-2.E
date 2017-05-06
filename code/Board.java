@@ -139,6 +139,10 @@ public class Board extends JPanel implements ActionListener {
         return lamps;
     }
     
+    public void stopMusic(){
+    	ui.stopMusic();
+    }
+    
     private ArrayList<Pacman> initPlayers(){
         int[] locations = new int[8];
         for(int i = 0 ; i < table.length; i++)
