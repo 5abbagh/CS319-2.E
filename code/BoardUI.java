@@ -41,7 +41,7 @@ public class BoardUI extends JPanel
 {
 	// Constants
     public  final int SCORE_PANEL_WIDTH = 1368;
-    public  final int SCORE_PANEL_HEIGHT = 200;
+    public  final int SCORE_PANEL_HEIGHT = 125;
     public  final int BOARD_PANEL_WIDTH = 1368;
     public  final int BOARD_PANEL_HEIGHT = 768;
     private final int DELAY = 10;
@@ -62,7 +62,7 @@ public class BoardUI extends JPanel
     private AudioInputStream patrolSound;
     private MyKeysAdapter keys = new MyKeysAdapter();
     private Board board;
-    
+    private boolean shadowOn = false;
     // Constructor
     public BoardUI( Board board ) 
     {
@@ -75,13 +75,17 @@ public class BoardUI extends JPanel
     	this.tableWidth = table[0].length;
     	this.tableHeight = table.length;
     	this.objects = board.getObjects();
-        unitHeight = BOARD_PANEL_HEIGHT / tableHeight;
+        unitHeight = (BOARD_PANEL_HEIGHT - SCORE_PANEL_HEIGHT) / tableHeight;
         unitWidth = BOARD_PANEL_WIDTH /tableWidth;
   
     	this.addKeyListener(keys);
         this.setFocusable(true);
-        this.requestFocusInWindow();
+        //this.requestFocusInWindow();
     }
+    
+    public void shadowOn(){
+    	shadowOn = true;
+    } 
     
     public void filter(Graphics x){
         BufferedImage img = new BufferedImage(SCORE_PANEL_WIDTH, BOARD_PANEL_HEIGHT, BufferedImage.TYPE_INT_ARGB);
@@ -184,7 +188,8 @@ public class BoardUI extends JPanel
         doMazeDrawing(x);       
         doObjectsDrawing(x);
         doPanelDrawing(x);
-        //filter(x);   
+        if(shadowOn)	
+        	filter(x);   
     }
     
     public void initSounds(AudioInputStream[] list){
@@ -229,13 +234,13 @@ public class BoardUI extends JPanel
     		int obHeight = ob.getHeight();
     		int obX = ob.getX();
     		int obY = ob.getY();
-    		g.drawImage(obImg, obX, obY + SCORE_PANEL_HEIGHT, obWidth, obHeight, null);
+    		g.drawImage(obImg, obX, obY + SCORE_PANEL_HEIGHT , obWidth, obHeight, null);
     		if ( ob instanceof Bomb )
     		{       
                         Bomb bomb = (Bomb) ob;
     			long time = System.currentTimeMillis();
     			boolean explode = bomb.isAvailableToExplosion(time);
-                        
+                System.out.println(bomb.isAvailableToExplosion(time));       
     			if (explode)
     			{
     				int range = bomb.getRange();
@@ -292,11 +297,18 @@ public class BoardUI extends JPanel
     	}
     }
     
+    public void keyPressed(KeyEvent e){
+    	keys.keyPressed(e);
+    }
+    
+    public void keyReleased(KeyEvent e){
+    	keys.keyReleased(e);
+    }
     
     private void doMazeDrawing(Graphics g) 
     {
-    	int rectWidth = BOARD_PANEL_WIDTH / tableWidth;
-    	int rectHeight = BOARD_PANEL_HEIGHT / tableHeight;
+    	int rectWidth = (BOARD_PANEL_WIDTH ) / tableWidth;
+    	int rectHeight = (BOARD_PANEL_HEIGHT - SCORE_PANEL_HEIGHT) / tableHeight;
     	int rectX = 0;
     	int rectY = SCORE_PANEL_HEIGHT;
     	for ( int i = 0; i < tableHeight; i++ )
@@ -330,7 +342,8 @@ public class BoardUI extends JPanel
     class MyKeysAdapter extends KeyAdapter 
     {
         private boolean[] list = new boolean[100];
-        @Override
+        
+       
         public void keyReleased(KeyEvent e) 
         {
             
