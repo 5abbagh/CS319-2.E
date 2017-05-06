@@ -5,14 +5,17 @@
  */
 package mazerunner;
 
+import java.awt.Dimension;
+
 /**
  *
- * @author Mehmet
+ * @author LUL
  */
 
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.io.FileInputStream;
 import java.util.ArrayList;
 import javax.swing.ImageIcon;
@@ -26,7 +29,8 @@ import javax.sound.sampled.AudioInputStream;
 public class Board extends JPanel implements ActionListener {
     public int numP = 1;
     public  final int WIDTH = 1368;
-    public  final int HEIGHT = 768;
+    public  final int HEIGHT = 768-125;
+    
     private final int PLAYER_SPEED = 10;
     private final int PATROL_SPEED = 1;
     private final int NUMBER_OF_SLOW_PATROLS = 0;
@@ -38,8 +42,8 @@ public class Board extends JPanel implements ActionListener {
     private final int BONUS_TIME = 22;
     private final int BASE_LAMP_NUM = 7;
     private final int BASE_LAMP_RANGE = 50;
-    
-    private int gameLength = 60000;
+    private final int MAX_GAME_LEN = 60000;
+    private int gameLength = MAX_GAME_LEN;
     private long startTime;
     private Timer timer;
     private ArrayList<Pacman> players = new ArrayList<Pacman>();
@@ -91,13 +95,13 @@ public class Board extends JPanel implements ActionListener {
     }
     
     private void initBoard(int numberOfPlayers, int level, Console root, boolean isRestart){
-    	
+    	setSize(new Dimension(1368,768));
         this.level = level;
         console = root;
         containerPanel = root.getPanel();
         numP = numberOfPlayers;
         result = -1;
-        gameLength *= level;
+        gameLength = MAX_GAME_LEN* level;
         startTime = System.currentTimeMillis();
         table = fileManager.getMaze(numberOfPlayers, level);
         initImages();
@@ -115,7 +119,8 @@ public class Board extends JPanel implements ActionListener {
             containerPanel.revalidate();
         }
         ui.initSounds(fileManager.getMusic());
-        ui.requestFocusInWindow(); 
+        if(level == 3)
+        	ui.shadowOn();
     }
     
     protected Lamp[] getLamps(){
@@ -125,6 +130,7 @@ public class Board extends JPanel implements ActionListener {
     private Lamp[] initLamps(){
         int numLamps = (int) (BASE_LAMP_NUM * (1 + Math.random()) * level);
         int range = (int) (BASE_LAMP_RANGE * (1 + Math.random()));
+
         Lamp[] lamps = new Lamp[numLamps];
         for(int i = 0; i < numLamps; i++){
             int[] loc = getFreeIndex();
@@ -204,7 +210,15 @@ public class Board extends JPanel implements ActionListener {
         BonusImage = imageList.get(11);
     }
     
-    //Continious Update Part
+    public void keyPressed(KeyEvent e){
+    	ui.keyPressed(e);
+    }
+    
+    public void keyReleased(KeyEvent e){
+    	ui.keyReleased(e);
+    }
+    
+    //Continuous Update Part
     public void actionPerformed(ActionEvent e) {
         try{
             
@@ -219,7 +233,6 @@ public class Board extends JPanel implements ActionListener {
                 updateBonuses();
             }
             ui.repaint();
-           
             containerPanel.repaint();
         }catch(Exception ex){
         }
@@ -263,7 +276,9 @@ public class Board extends JPanel implements ActionListener {
         return list;
     }
     
+    
     //Controllers
+
     private boolean moveCollide(MovingObject obj, int direction){
         
         int plannedX = obj.getX() ;
@@ -592,6 +607,7 @@ public class Board extends JPanel implements ActionListener {
                 if(players.get(0).isDead()){
                     if(numP == 2)
                         endGame(true, players.get(1));
+                    endGame(false, null);
                 }
              
                 if(numP == 2)
@@ -615,7 +631,7 @@ public class Board extends JPanel implements ActionListener {
             JOptionPane.showMessageDialog(frame,
                 "You SUCK at this game","GIT GUD",JOptionPane.INFORMATION_MESSAGE,
                 new ImageIcon("src\\img\\mid.png"));
-            console.selectOpt(0,-1);
+            gotoMain();
             }
           
             
@@ -630,7 +646,7 @@ public class Board extends JPanel implements ActionListener {
                 	JFrame frame = new JFrame();
                     JOptionPane.showMessageDialog(frame,
                     "Player " + player.getPlayerNumber() + " won!","You won!",JOptionPane.INFORMATION_MESSAGE);
-                    //console.setOption();
+                    gotoMain();
                 }
             }
         }catch (Exception e){
@@ -834,7 +850,7 @@ public class Board extends JPanel implements ActionListener {
     }
     public void gotoMain(){
     	this.pause(true);
-    	System.out.println("invoked");
+
     	console.selectOpt(0, -1);
     }
     public int determineKeyUser(int key){
@@ -892,6 +908,8 @@ public class Board extends JPanel implements ActionListener {
                     if(!textArea.getText().equals("")){
                         nameToSave = textArea.getText();
                         board.pause(false);
+                        dispose();
+                        board.saveScore();
                         sc = null;
                     }
                 }
