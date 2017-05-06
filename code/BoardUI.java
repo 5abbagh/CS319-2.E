@@ -199,9 +199,10 @@ public class BoardUI extends JPanel
         
     }
     
+    Clip clip;
     public void startSong(AudioInputStream in){
         try{
-        Clip clip = AudioSystem.getClip();
+        clip = AudioSystem.getClip();
         clip.open(in);
         clip.loop(Clip.LOOP_CONTINUOUSLY);
         //Thread.sleep(10000); // looping as long as this thread is alive
@@ -209,8 +210,11 @@ public class BoardUI extends JPanel
             
         }
     }
+    public void stopMusic(){
+    	clip.stop();
+    }
     
-    private void doPanelDrawing(Graphics g){
+        private void doPanelDrawing(Graphics g){
         g.setColor(Color.ORANGE);
         g.fillRect(0, 0, BOARD_PANEL_WIDTH, SCORE_PANEL_HEIGHT);
         g.setFont(new Font("TimesRoman", Font.PLAIN, 25));
