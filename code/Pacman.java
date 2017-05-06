@@ -1,13 +1,18 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package mazerunner;
 
 /**
  *
- * @author Mehmet
+ * @author LUL
  */
 import java.util.ArrayList;
 import java.awt.Image;
 public class Pacman extends MovingObject {
-    private final int START_SCORE = 250;
+    private final int START_SCORE = 650;
     private final int START_HEALTH = 3;
     private final int OWN_BOMB_COST = 100;
     private final int ENEMY_BOMB_COST = 100;
@@ -68,8 +73,6 @@ public class Pacman extends MovingObject {
     }   
     public void decreaseLife(){
         lives--;
-        if (lives <= 0)
-            isDead = true;
     }   
     public void setLife(int life){
         lives = life;
@@ -109,6 +112,9 @@ public class Pacman extends MovingObject {
     public void die(){
         decreaseLife();
         resetLocation();
+    }
+    public boolean isDead(){
+        return lives<=0;
     }
     public void increaseScore(int amount){
         setScore(getScore() + amount);
