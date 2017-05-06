@@ -11,43 +11,54 @@ public class Console extends JFrame
 {
 	MainMenu mainMenu;     	// 0
 	Board board;			// 1 for single		// 2 for multi
-	Leaderboard lb;		// 3
+	Leaderboard lb;			// 3
 	Tutorial tut;			// 4
-	int level = 1;
+	Credits credits;		// 5
+	
 	String [] titles;
 	JPanel [] panels;
-	int temp;
+	
 	JPanel panel;
+	int level = 1;
+	
 	public Console()
 	{
-		
 		panel = new JPanel();
 		panel.addKeyListener(new PanelKeysAdapter());
 		mainMenu = new MainMenu( this );
+		board = new Board(1,1,this);
 		lb  = new Leaderboard( this);
-		tut = new Tutorial();
-		titles = new String [] {"Main Menu", "Single Player", "Multiplayer", "Leaderboard", "Tutorials"};
-		panels = new JPanel [4];
+		tut = new Tutorial( this );
+		credits = new Credits(this);
+		titles = new String [] {"Main Menu", "Single Player", "Multiplayer", "Leaderboard", "Tutorials", "Credits"};
+		panels = new JPanel [5];
 		panels[0] = mainMenu;
+		panels[1] = board;
 		panels[2] = lb;
 		panels[3] = tut;
-
+		panels[4] = credits;
+		
 		add(panel);
-                
-                setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-                this.setVisible(true);
-                
-                setLocationRelativeTo(null);
-                this.setSize(new Dimension(1368,768));
-                this.setResizable(false);
-                setVisible(true);
-                selectOpt(0 , 1);
+		
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+        this.setSize(new Dimension(1368,768));
+        this.setResizable(false);
+        setVisible(true);
+        
+        selectOpt(0 , -1);
 	}
 	
-        public JPanel getPanel(){
-            return panel;
-        }
-        
+    public JPanel getPanel()
+    {
+    	return panel;
+    }
+    
+    public void exit()
+    {
+    	System.exit(10);
+    }
+    
 	// Set panel
     private int activeOp = 0;
 	public void selectOpt( int panel, int level)
@@ -57,7 +68,6 @@ public class Console extends JFrame
 		{
 			activeOp = 0;
 			this.panel.removeAll();
-			board = null;
 			mainMenu = new MainMenu(this);
 			panels[0] = mainMenu;
 			
@@ -90,6 +100,7 @@ public class Console extends JFrame
 			setTitle(titles[2]);
             this.pack();
 		}
+		// Leaderboard
 		else if (panel == 3 )
 		{
 			activeOp = 3;
@@ -100,6 +111,7 @@ public class Console extends JFrame
 			setTitle(titles[3]);
             this.pack();
 		}
+		// Tutorials
 		else if (panel == 4 )
 		{
 			activeOp = 4;
@@ -110,53 +122,60 @@ public class Console extends JFrame
 			setTitle(titles[4]);
             this.pack();
 		}
-		else if (panel == 6 )
+		// Credits
+		else if (panel == 5 )
 		{
-			System.exit(0);
+			activeOp = 5;
+			this.panel.removeAll();
+			this.panel.add(panels [4]);
+			this.panel.revalidate();
+			this.revalidate();
+			setTitle(titles[5]);
+            this.pack();
 		}
 		repaint();
-		repaint();
 	}
-        
+	
 	class PanelKeysAdapter extends KeyAdapter 
     {
-		public void keyPressed(KeyEvent e){
-	    	switch(activeOp){
-	    	case 0:
-	    		mainMenu.keyPressed(e);
-	    		break;
-	    	case 1:
-	    		board.keyPressed(e);
-	    		break;
-	    	case 2:
-	    		board.keyPressed(e);
-	    		break;
-	    	case 3:
-	    		tut.keyPressed(e);
-	    		break;
-	    	case 4:
-	    		lb.keyPressed(e);
-	    		break;
+		public void keyPressed(KeyEvent e)
+		{
+	    	switch(activeOp)
+	    	{
+		    	case 0:
+		    		mainMenu.keyPressed(e);
+		    		break;
+		    	case 1:
+		    		board.keyPressed(e);
+		    		break;
+		    	case 2:
+		    		board.keyPressed(e);
+		    		break;
+		    	case 4:
+		    		tut.keyPressed(e);
+		    		break;
+		    	case 3:
+		    		lb.keyPressed(e);
+		    		break;
+		    	case 5:
+		    		credits.keyPressed(e);
+		    		break;
 	    	}
 	    }
 	    
-	    public void keyReleased(KeyEvent e){
-	    	switch(activeOp){
-	    	case 0:
-	    		mainMenu.keyReleased(e);
-	    		break;
-	    	case 1:
-	    		board.keyReleased(e);
-	    		break;
-	    	case 2:
-	    		board.keyReleased(e);
-	    		break;
-	    	case 3:
-	    		tut.keyReleased(e);
-	    		break;
-	    	case 4:
-	    		lb.keyReleased(e);
-	    		break;
+	    public void keyReleased(KeyEvent e)
+	    {
+	    	switch(activeOp)
+	    	{
+		    	case 0:
+		    		mainMenu.keyReleased(e);
+		    		break;
+		    	case 1:
+		    		board.keyReleased(e);
+		    		break;
+		    	case 2:
+		    		board.keyReleased(e);
+		    		break;
 	    	}
 	    }
     }
