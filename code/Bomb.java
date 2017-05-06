@@ -7,7 +7,7 @@ import java.awt.Image;
 public class Bomb extends GameObject{
     private long plantTime;
     private long duration;
-    private int rangeOfExplosion = 1;
+    private int rangeOfExplosion = 4;
     private int plantedBy;
     public boolean isExploded = false;
     Pacman owner;
