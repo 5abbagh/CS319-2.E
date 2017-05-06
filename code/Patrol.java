@@ -1,4 +1,8 @@
-
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package mazerunner;
 
 import java.awt.Image;
@@ -6,7 +10,7 @@ import java.util.ArrayList;
 
 /**
  *
- * @author Mehmet
+ * @author LUL
  */
 public class Patrol extends MovingObject{
     private int dx = 1;
@@ -14,7 +18,7 @@ public class Patrol extends MovingObject{
     private int initialSpeed;
     private boolean isFollowPatrol;
     private boolean isFast;
-    private boolean alive = true;
+    //private boolean alive = true;
     public Patrol(int x, int y,  int speed,Image image, boolean isFollow, int width, int height) {
         super(x, y, image, speed,width, height);
         isFollowPatrol = isFollow;
@@ -62,6 +66,7 @@ public class Patrol extends MovingObject{
                         break;
                 }
             }
+            /*
             else if(routes.size() > 2){
                 int flag = (int)(Math.random()*routes.size());
                 
@@ -84,7 +89,7 @@ public class Patrol extends MovingObject{
                         break;
                 }
             }
-            
+            */
             x += speed * dx ;
             y += speed * dy ;
             }catch(Exception e){
