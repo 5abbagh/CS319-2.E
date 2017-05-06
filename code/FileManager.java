@@ -22,43 +22,66 @@ import javax.sound.sampled.Clip;
 
 public class FileManager
 {
+	
 	private static ArrayList<String> namelist;
-	public static ArrayList<Image> list = new ArrayList<Image>();
+	public static ArrayList<Image> list;
+	
+	// Methods
 	public static ArrayList<Image> getImages()
-	  {
-	      namelist = new ArrayList();
+	{
+		  list = new ArrayList<Image>();
+	      namelist = new ArrayList<String>();
 	      namelist.add("bomb");
-	      namelist.add("expl");
+	      namelist.add("bonus");
 	      namelist.add("ai");
 	      namelist.add("ai2");
 	      namelist.add("right");
 	      namelist.add("left");
 	      namelist.add("up");
 	      namelist.add("down");
-	      namelist.add("life");
-	      namelist.add("score");
-	      namelist.add("speed");
+	      namelist.add("bonus");
+	      namelist.add("bonus");
+	      namelist.add("bonus");
 	      namelist.add("bonus");
 	    
 	      for(String s : namelist)
 	          list.add((new ImageIcon("src\\img\\" + s + ".png")).getImage());
 	      return list;
-	  }
+	}
 	
-	public static int[][] getMaze(int numP, int difficulty){
+	public static ArrayList<Image> getTutorialImages()
+	{
+		  ArrayList<Image> tutList = new ArrayList<Image>();
+	      ArrayList<String> namelist = new ArrayList<String>();
+	      namelist.add("bombTut");
+	      namelist.add("bonusTut");
+	      namelist.add("finishTut");
+	      namelist.add("patrolsTut");
+	      namelist.add("scoreTut");
+	      
+	      for(String s : namelist)
+	    	  tutList.add((new ImageIcon("src\\tutorialimg\\" + s + ".png")).getImage());
+	      return tutList;
+	}
+	
+	public static int[][] getMaze(int numP, int difficulty)
+	{
 	    //2 for 1 start
 	    //3 for 1 end
 	    //-2 for 2 start
 	    //-3 for 2 end
 	    //1 for walls
             String s = numP + "" + difficulty;
-            String path = "C:\\Users\\LUL\\eclipse_workspace\\lulz\\src\\text\\" + s + ".txt";
+            String path = "src\\text\\" + s + ".txt";
             Scanner scan = null;
-            try {
-            scan = new Scanner(new File(path)); }catch(Exception e){e.printStackTrace();}
+            try 
+            {
+            	scan = new Scanner(new File(path)); 
+            } catch(Exception e){e.printStackTrace();}
             String line = scan.nextLine();
             ArrayList<Integer[]> list = new ArrayList();
-            while(!line.equals("")){
+            while(!line.equals(""))
+            {
                 String[] lineList = line.split(",");
                 Integer[] intList = new Integer[lineList.length];
                 for(int i = 0; i < intList.length; i++){
@@ -73,7 +96,8 @@ public class FileManager
                 }
             }
             int [][] ret = new int[list.size()][list.get(0).length];
-            for(int i = 0; i < ret.length; i++){
+            for(int i = 0; i < ret.length; i++)
+            {
                 for(int j = 0; j < ret[0].length; j++){
                     
                     ret[i][j] = list.get(i)[j];
@@ -81,26 +105,26 @@ public class FileManager
                 }
             }
             return ret;
-	  }
+	 }
 	
 	public static ArrayList<String> getNames()
 	{
-            
 		ArrayList<String> namelist = new ArrayList<String>(); // initialize namelist
-		try(Scanner fileIn = new Scanner(new File("C:\\Users\\LUL\\Documents\\NetBeansProjects\\test\\src\\text\\names.txt"));){
-		for(int i=0;i<5;i++)
+		try(Scanner fileIn = new Scanner(new File("src\\text\\names.txt"));)
 		{
-			String s = fileIn.next();
-			namelist.add(s);
-		} }catch(Exception e){e.printStackTrace();}
+			for(int i=0;i<5;i++)
+			{
+				String s = fileIn.next();
+				namelist.add(s);
+			} 
+		}catch(Exception e){e.printStackTrace();}
 		return namelist;
 	}
-	
 	
 	public static ArrayList<Integer> getScores()
 	{
 		ArrayList<Integer> scorelist = new ArrayList<>(); // initialize score list
-		try(Scanner fileIn = new Scanner(new File("C:\\Users\\LUL\\Documents\\NetBeansProjects\\test\\src\\text\\scores.txt"));){
+		try(Scanner fileIn = new Scanner(new File("src\\text\\scores.txt"));){
 		for(int i=0;i<5;i++)
 		{
 			String s = fileIn.next();
@@ -110,17 +134,15 @@ public class FileManager
 		return scorelist;
 	}
 	
-	
-	
 	public static void changeNames(ArrayList<String> listX)
 	{   
             try{
-		Scanner fileIn = new Scanner(new File("C:\\Users\\LUL\\Documents\\NetBeansProjects\\test\\src\\text\\names.txt"));
+		Scanner fileIn = new Scanner(new File("src\\text\\names.txt"));
 		for(int i=0;i<5;i++)
 		{
 		String oldName = fileIn.next();
 		String s = listX.get(i);
-		Path path = Paths.get("C:\\Users\\LUL\\Documents\\NetBeansProjects\\test\\src\\text\\names.txt");
+		Path path = Paths.get("src\\text\\names.txt");
 		Charset charset = StandardCharsets.UTF_8;
 		String content = new String(Files.readAllBytes(path), charset);
 		content = content.replaceAll( oldName ,"");
@@ -132,7 +154,7 @@ public class FileManager
 			{
 				String b = listX.get(i);
 				String a = "" + b;
-	            FileWriter writer = new FileWriter("C:\\Users\\LUL\\Documents\\NetBeansProjects\\test\\src\\text\\names.txt", true);
+	            FileWriter writer = new FileWriter("src\\text\\names.txt", true);
 	            writer.write(a +"\t");
 	            writer.close();
 	        } catch (IOException e) 
@@ -147,11 +169,11 @@ public class FileManager
 	{
             try{
                 		
-		Scanner fileIn = new Scanner(new File("C:\\Users\\LUL\\Documents\\NetBeansProjects\\test\\src\\text\\scores.txt"));
+		Scanner fileIn = new Scanner(new File("src\\text\\scores.txt"));
 		for(int i=0;i<5;i++)
 		{
 		String oldName = fileIn.next();
-		Path path = Paths.get("C:\\Users\\LUL\\Documents\\NetBeansProjects\\test\\src\\text\\scores.txt");
+		Path path = Paths.get("src\\text\\scores.txt");
 		Charset charset = StandardCharsets.UTF_8;
 		String content = new String(Files.readAllBytes(path), charset);
 		content = content.replaceAll( oldName , "");
@@ -163,7 +185,7 @@ public class FileManager
 			{
 				int a = listX.get(i);
 				String s = "" + a;
-	            FileWriter writer = new FileWriter("C:\\Users\\LUL\\Documents\\NetBeansProjects\\test\\src\\text\\scores.txt", true);
+	            FileWriter writer = new FileWriter("src\\text\\scores.txt", true);
 	            writer.write(s +"\t");
 	            writer.close();
 	        } catch (IOException e) 
@@ -176,22 +198,21 @@ public class FileManager
 		
             }catch(Exception e){e.printStackTrace();}
 	}
-        
-        public static AudioInputStream[] getMusic(){
+    
+	public static AudioInputStream[] getMusic(){
             
-            String file1 = "src\\sound\\1.wav";
-            String file2 = "src\\sound\\2.wav";
+            String file1 = "src\\sound\\1.mp3";
+            String file2 = "src\\sound\\2.mp3";
             AudioInputStream[] in = new AudioInputStream[2];
             try {
                 for(int i = 0; i < 2; i++){
-                    AudioInputStream audioStream = AudioSystem.getAudioInputStream(new File("src\\sound\\" + (i + 1) + ".wav"));
+                    AudioInputStream audioStream = AudioSystem.getAudioInputStream(new File("src\\sound\\" + (i + 1) + ".mp3"));
                     in[i] = audioStream;
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
             return in;
-}
-	
+        }
 	
 }
